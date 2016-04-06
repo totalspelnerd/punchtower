@@ -1,5 +1,9 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+/**
+ * This class represents the playable character and is called whenever a new game starts.
+ */
+
 public class Character{
 	private String name;
 	private int stat1;

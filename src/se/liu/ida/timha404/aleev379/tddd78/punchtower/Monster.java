@@ -1,5 +1,10 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+/**
+ * This class is used to represent monsters
+ */
+
+
 public class Monster{
 	private String name;
 	private int stat1;
@@ -43,5 +48,16 @@ public class Monster{
 
 	public void setStat3(final int stat3) {
 		this.stat3 = stat3;
+	}
+
+	/**
+	 * This method is used to generate a new random monster
+	 * @return thisMonster, a new monster
+	 */
+
+	public Monster generateMonster() {
+		String type = MonsterType.randomMonsterType();
+		Monster thisMonster = new Monster(type, 1,2,3);
+		return thisMonster;
 	}
 }
