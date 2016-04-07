@@ -1,7 +1,10 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
 import java.awt.*;
 
+/**
+ * This class is generally used to handle different states in the game. Such as mainmenu, optionmenu or ingame.
+ */
 public abstract class Gamestate
 {
     /**
@@ -16,6 +19,11 @@ public abstract class Gamestate
      * @param timeElapsed time elapsed since last update.
      */
     public abstract void update(float timeElapsed);
+
+    /**
+     * Tick of the game. Called once every second.
+     */
+    public void tick() {}
 
     /**
      * Rneders the game.

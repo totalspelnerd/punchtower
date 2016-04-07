@@ -56,6 +56,8 @@ public class Character{
 		this.stat3 = stat3;
 	}
 
+    	// Change these to be called getHeadItem? To better understand the code.
+
 	public Item getHead() {
 		return head;
 	}

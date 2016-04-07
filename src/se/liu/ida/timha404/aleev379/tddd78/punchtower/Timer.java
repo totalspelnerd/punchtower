@@ -9,7 +9,7 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 public class Timer
 {
     /**
-     * The time of the last frame.
+     * The time of the system since last update (timeElapsed).
      */
     private long currentTime;
 
@@ -40,7 +40,7 @@ public class Timer
     public float timeElapsed()
     {
 	long lastTime = currentTime;
-	currentTime = System.nanoTime();
+	resetTime();
 	return (float)(currentTime - lastTime) / NANO_SECOND;
     }
 }

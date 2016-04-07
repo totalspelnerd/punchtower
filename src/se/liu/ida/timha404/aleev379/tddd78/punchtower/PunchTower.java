@@ -1,5 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateIngame;
+
 /**
  * The meat of the game. Here is where the main gameloop is and where the game starts to run (main method).
  * This class handles all the calling to the drawing / updates.
@@ -10,8 +13,16 @@ public class PunchTower
     /**
      * Frame cap of the game.
      */
+    public static final int UPDATES_PER_SECOND = 60;
+
+    /**
+     * Frame cap of the game.
+     */
     public static final int FRAME_CAP = 60;
 
+    /**
+     * Instance of the game.
+     */
     private static final PunchTower INSTANCE = new PunchTower();
 
     /**
@@ -21,46 +32,77 @@ public class PunchTower
     private boolean running = true;
 
     /**
-     * Current fps of the game.
+     * Current frames per second of the game.
      */
     private int fps = 0;
 
+    /**
+     * Current updates per second of the game.
+     */
+    private int ups = 0;
+
+    /**
+     * Private since this should never be created anywhere else.<br>
+     * We will never have more than one instance of the game running on one process (at the same time).
+     */
     private PunchTower()
     {
 
     }
-
+    int frames = 0;
     /**
      * This method is called to run the gameloop. It is not threaded so it will take up the whole thread and run forever.
      */
     private void run()
     {
-	float delta = 0;
-	float updateTime = 1.0f/FRAME_CAP;
+	float delta;
+	float updateTime = 1.0f/UPDATES_PER_SECOND;
 	float updateDelta = 0;
-	float frameTime = 1.0f;
+	float renderTime = 1.0f/FRAME_CAP;
+	float renderDelta = 0;
+	float frameTime = 1.0f; // Once every second
 	float frameDelta = 0;
-	int frames = 0;
+
+	int updates = 0;
 
 	Timer timer = new Timer();
 	PunchFrame frame = new PunchFrame();
+	GamestateHandler.getInstance().setGamestate(new StateIngame());
 	while(running)
 	{
 	    delta = timer.timeElapsed();
 	    updateDelta += delta;
 	    frameDelta += delta;
+	    renderDelta += delta;
 	    if(updateDelta >= updateTime)
 	    {
 		frame.update(updateTime);
+		updates++;
+		updateDelta-=updateTime;
+	    }
+	    if(renderDelta >= renderTime)
+	    {
 		frame.repaint();
 		frames++;
-		updateDelta-=updateTime;
+		renderDelta-=renderTime;
 	    }
 	    if(frameDelta >= frameTime)
 	    {
 		fps = frames;
+		ups = updates;
 		frames = 0;
+		updates = 0;
+		frame.tick();
 		frameDelta-=frameTime;
+	    }
+	    try
+	    {
+		Thread.sleep(1);
+	    }
+	    catch(InterruptedException e)
+	    {
+		// Doesn't matter if this happens every once in a while.
+		// Since this is more to controll the fps to a more exact time.
 	    }
 	}
     }
@@ -74,9 +116,19 @@ public class PunchTower
     }
 
     public int getFPS()
-    {
-	return fps;
-    }
+            {
+        	return fps;
+            }
+
+    public int getFames()
+            {
+        	return frames;
+            }
+
+    public int getUPS()
+        {
+    	return ups;
+        }
 
     /**
      * Starts the gameloop.

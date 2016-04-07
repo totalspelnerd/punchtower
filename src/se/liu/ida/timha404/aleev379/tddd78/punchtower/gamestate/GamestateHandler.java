@@ -1,11 +1,18 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
+
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchFrame;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 
 import java.awt.*;
 
 /**
  * Handles the gametstate. <br>
- * Handles changing state, going back to last state, updating and rendering of state.
+ * Handles changing state, going back to last state, updating and rendering of state.<br>
+ * This class should never be called outside of PunchFrame or PunchPanel.
+ *
  * @see Gamestate
+ * @see PunchFrame
+ * @see PunchTower
  */
 
 public class GamestateHandler
@@ -68,8 +75,16 @@ public class GamestateHandler
      * @param deltaTime the time since last update
      */
     public void update(float deltaTime)
+        {
+    	current.update(deltaTime);
+        }
+
+    /**
+     * Ticks the current gamestate.
+     */
+    public void tick()
     {
-	current.update(deltaTime);
+    current.tick();
     }
 
     /**
