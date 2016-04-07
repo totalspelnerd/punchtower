@@ -37,6 +37,7 @@ public class Item{
 		double drop = rnd.nextDouble();
 		Rarity thisRarity = null;
 		double rarityMod = 0;
+
 		if (drop <= curTower.getLegendaryDropChance()) {
 			thisRarity = Rarity.LEGENDARY;
 			rarityMod = 3;
@@ -49,9 +50,6 @@ public class Item{
 		} else if (drop <= curTower.getNormalDropChance()) {
 			thisRarity = Rarity.NORMAL;
 			rarityMod = 1;
-		} else {
-		    thisRarity = Rarity.NORMAL;
-		    rarityMod = 1;
 		}
 
 		double exponent = 1.3;

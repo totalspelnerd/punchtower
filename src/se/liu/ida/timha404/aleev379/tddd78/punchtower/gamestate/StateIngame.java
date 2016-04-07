@@ -49,7 +49,8 @@ public class StateIngame extends Gamestate
     public void render(final Graphics g)
     {
 		g.drawImage(image,0,0,1280,720,null);
-		item.render(g,PunchPanel.WIDTH/2-item.getStats().getWidth()/2,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
+		if(item != null)
+			item.render(g,PunchPanel.WIDTH/2-item.getStats().getWidth()/2,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
 		c.render(g,10,40);
 		monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, 40);
 		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,100));
