@@ -5,12 +5,13 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  * Displays the current gamestate and updates it.
  * @see Gamestate
  */
-public class PunchPanel extends JPanel
+public class PunchPanel extends JPanel implements KeyListener
 {
 
     /**
@@ -28,14 +29,18 @@ public class PunchPanel extends JPanel
     public PunchPanel()
     {
 	setPreferredSize(new Dimension(WIDTH,HEIGHT));
+	setFocusable(true);
+	addKeyListener(this);
     }
 
     @Override
     public void paintComponent(Graphics g)
     {
-	super.paintComponent(g);
-	GamestateHandler.getInstance().render(g);
-	g.drawString(Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,20);
+		super.paintComponent(g);
+		GamestateHandler.getInstance().render(g);
+		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,20));
+		g.drawString(Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,20);
+		PunchTower.getInstance().addFrames();
     }
 
     /**
@@ -67,5 +72,20 @@ public class PunchPanel extends JPanel
     public boolean wrongSize()
     {
 	return getWidth()!=WIDTH || getHeight()!=HEIGHT;
+    }
+
+    @Override
+	public void keyTyped(final KeyEvent e) {
+
+    }
+
+    @Override
+	public void keyPressed(final KeyEvent e) {
+
+    }
+
+    @Override
+	public void keyReleased(final KeyEvent e) {
+
     }
 }

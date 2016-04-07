@@ -1,21 +1,27 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * This class is used to represent monsters
  */
-
-
 public class Monster{
-	private String name;
-	private int stat1;
-	private int stat2;
-	private int stat3;
 
-	public Monster(final String name, final int stat1, final int stat2, final int stat3) {
+	private String name;
+	private Image image;
+	private Stat stats;
+
+	public Monster(final String name, final int initiative, final int defense, final int attack) {
 		this.name = name;
-		this.stat1 = stat1;
-		this.stat2 = stat2;
-		this.stat3 = stat3;
+		try {
+			this.image = ImageIO.read(new File("res/ogre.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		stats = new Stat(name,initiative, defense, attack);
 	}
 
 	public String getName() {
@@ -26,28 +32,39 @@ public class Monster{
 		this.name = name;
 	}
 
-	public int getStat1() {
-		return stat1;
+	public int getInitiative() {
+		return stats.initiative;
 	}
 
-	public void setStat1(final int stat1) {
-		this.stat1 = stat1;
+	public void setInitiative(final int initiative) {
+		stats.initiative = initiative;
 	}
 
-	public int getStat2() {
-		return stat2;
+	public int getDefense() {
+		return stats.defense;
 	}
 
-	public void setStat2(final int stat2) {
-		this.stat2 = stat2;
+	public void setDefense(final int defense) {
+		stats.defense = defense;
 	}
 
-	public int getStat3() {
-		return stat3;
+	public int getAttack() {
+		return stats.attack;
 	}
 
-	public void setStat3(final int stat3) {
-		this.stat3 = stat3;
+	public void setAttack(final int attack) {
+		stats.attack = attack;
+	}
+
+	public Stat getStats()
+	{
+		return stats;
+	}
+
+	public void render(Graphics g, int x, int y)
+	{
+		stats.render(g,x,y,new Color(0xaa0000));
+		g.drawImage(image, x-400,y+200,450,400,null);
 	}
 
 	/**
@@ -55,9 +72,9 @@ public class Monster{
 	 * @return thisMonster, a new monster
 	 */
 
-	public Monster generateMonster() {
+	public static Monster generateMonster() {
 		String type = MonsterType.randomMonsterType();
-		Monster thisMonster = new Monster(type, 1,2,3);
+		Monster thisMonster = new Monster(type, 1,2129,3);
 		return thisMonster;
 	}
 }

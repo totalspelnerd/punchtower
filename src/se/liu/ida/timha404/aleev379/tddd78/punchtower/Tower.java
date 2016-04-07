@@ -6,6 +6,7 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 
 public class Tower{
+
 	private int floor;
 	private double normalDropChance = 0.8;
 	private double rareDropChance = 0.1;

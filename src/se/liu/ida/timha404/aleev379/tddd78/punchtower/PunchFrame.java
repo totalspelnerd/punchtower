@@ -24,6 +24,7 @@ public class PunchFrame extends JFrame
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setTitle("PunchTower");
 	setContentPane(panel);
+	setFocusable(true);
 
 	// Sometimes the panel won't resize correctly on pack so we will run it until it does it correctly.
 	while(panel.wrongSize())

@@ -7,20 +7,23 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import java.util.Random;
 
+import java.awt.*;
+
 public class Item{
 	private ItemType iType;
-	private int stat1;
-	private int stat2;
-	private int stat3;
+	private Stat stats;
 	private Rarity rarity;
 
 
-	public Item(final ItemType iType,final int stat1,final int stat2,final int stat3, final Rarity rarity) {
+	public Item(final ItemType iType,final int initiative,final int defense,final int attack, final Rarity rarity) {
 		this.iType = iType;
-		this.stat1 = stat1;
-		this.stat2 = stat2;
-		this.stat3 = stat3;
+		stats = new Stat(iType.toString(),initiative,defense,attack);
 		this.rarity = rarity;
+	}
+
+	public Stat getStats()
+	{
+		return stats;
 	}
 
 	/**
@@ -29,7 +32,7 @@ public class Item{
 	 * @return A new item
 	 */
 
-	public Item generateItem(Tower curTower) {
+	public static Item generateRandomItem(Tower curTower) {
 		Random rnd = new Random();
 		double drop = rnd.nextDouble();
 		Rarity thisRarity = null;
@@ -46,11 +49,23 @@ public class Item{
 		} else if (drop <= curTower.getNormalDropChance()) {
 			thisRarity = Rarity.NORMAL;
 			rarityMod = 1;
+		} else {
+		    thisRarity = Rarity.NORMAL;
+		    rarityMod = 1;
 		}
 
-		Item thisItem = new Item(ItemType.randomItemType(),(int)((new Random().nextDouble()+curTower.getFloor()/100)*rarityMod*100),(int)((new Random().nextDouble()+curTower.getFloor()/100)*rarityMod*100),(int)((new Random().nextDouble()+curTower.getFloor()/100)*rarityMod*100),thisRarity);
+		double exponent = 1.3;
+		int ini = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		int def = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		int atk = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		Item thisItem = new Item(ItemType.randomItemType(),ini,def,atk,thisRarity);
 
 		return thisItem;
+	}
+
+	public void render(Graphics g, int x, int y)
+	{
+		stats.render(g,x,y,new Color(rarity.hexColor));
 	}
 
 }

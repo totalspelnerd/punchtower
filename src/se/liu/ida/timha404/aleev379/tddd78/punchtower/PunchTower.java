@@ -66,8 +66,9 @@ public class PunchTower
 	int updates = 0;
 
 	Timer timer = new Timer();
-	PunchFrame frame = new PunchFrame();
 	GamestateHandler.getInstance().setGamestate(new StateIngame());
+	PunchFrame frame = new PunchFrame();
+
 	while(running)
 	{
 	    delta = timer.timeElapsed();
@@ -82,8 +83,8 @@ public class PunchTower
 	    }
 	    if(renderDelta >= renderTime)
 	    {
-		frame.repaint();
-		frames++;
+		frame.pack(); // NEED TO UPDATE THE EVENT SYSTEM TO MAKE LIU COMPUTER RENDER AT 60 FPS. swing bug?
+		frame.render();
 		renderDelta-=renderTime;
 	    }
 	    if(frameDelta >= frameTime)
@@ -129,6 +130,11 @@ public class PunchTower
         {
     	return ups;
         }
+
+    public void addFrames()
+    {
+	frames++;
+    }
 
     /**
      * Starts the gameloop.
