@@ -12,7 +12,7 @@ public class Monster{
 
 	private String name;
 	private Image image;
-	private Stat stats;
+	private Stats stats;
 
 	public Monster(final String name, final int initiative, final int defense, final int attack) {
 		this.name = name;
@@ -21,7 +21,7 @@ public class Monster{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		stats = new Stat(name,initiative, defense, attack);
+		stats = new Stats(name, initiative, defense, attack);
 	}
 
 	public String getName() {
@@ -56,7 +56,7 @@ public class Monster{
 		stats.attack = attack;
 	}
 
-	public Stat getStats()
+	public Stats getStats()
 	{
 		return stats;
 	}

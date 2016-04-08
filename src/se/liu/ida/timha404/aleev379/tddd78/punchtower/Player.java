@@ -15,7 +15,7 @@ public class Player
 
 	private Image image;
 
-	private Stat stats;
+	private Stats stats;
 
 	private Item head = null;
 	private Item shoulder = null;
@@ -32,7 +32,7 @@ public class Player
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		stats = new Stat(name,initiative,defense,attack);
+		stats = new Stats(name, initiative, defense, attack);
 	}
 
 	public String getName() {

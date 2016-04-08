@@ -11,17 +11,17 @@ import java.awt.*;
 
 public class Item{
 	private ItemType iType;
-	private Stat stats;
+	private Stats stats;
 	private Rarity rarity;
 
 
 	public Item(final ItemType iType,final int initiative,final int defense,final int attack, final Rarity rarity) {
 		this.iType = iType;
-		stats = new Stat(iType.toString(),initiative,defense,attack);
+		stats = new Stats(iType.toString(), initiative, defense, attack);
 		this.rarity = rarity;
 	}
 
-	public Stat getStats()
+	public Stats getStats()
 	{
 		return stats;
 	}
