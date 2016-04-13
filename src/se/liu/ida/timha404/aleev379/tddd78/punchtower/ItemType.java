@@ -9,6 +9,7 @@ import java.util.Random;
 public enum ItemType{
 	HEAD, SHOULDER, CHEST, LEGS, BOOTS, WEAPON;
 
+	private static Random rnd = new Random();
 
 	/**
 	 * This method is used to generate a random item type for item generation.
@@ -16,7 +17,7 @@ public enum ItemType{
 	 */
 
 	public static ItemType randomItemType() {
-		int pick = new Random().nextInt(ItemType.values().length);
+		int pick = rnd.nextInt(ItemType.values().length);
 		return ItemType.values()[pick];
 	}
 }

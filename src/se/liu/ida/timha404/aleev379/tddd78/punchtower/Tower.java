@@ -12,6 +12,8 @@ public class Tower{
 	private double rareDropChance = 0.1;
 	private double epicDropChance = 0.05;
 	private double legendaryDropChance = 0.01;
+	private Player player;
+	private Monster curMonster;
 
 	public Tower(final int floor)//, final int normalDropChance, final int rareDropChance, final int epicDropChance,
 				 //final int legendaryDropChance)
@@ -21,46 +23,6 @@ public class Tower{
 		//this.rareDropChance = rareDropChance;
 		//this.epicDropChance = epicDropChance;
 		//this.legendaryDropChance = legendaryDropChance;
-	}
-
-	public int getFloor() {
-		return floor;
-	}
-
-	public void setFloor(final int floor) {
-		this.floor = floor;
-	}
-
-	public double getNormalDropChance() {
-		return normalDropChance;
-	}
-
-	public void setNormalDropChance(final int normalDropChance) {
-		this.normalDropChance = normalDropChance;
-	}
-
-	public double getRareDropChance() {
-		return rareDropChance;
-	}
-
-	public void setRareDropChance(final int rareDropChance) {
-		this.rareDropChance = rareDropChance;
-	}
-
-	public double getEpicDropChance() {
-		return epicDropChance;
-	}
-
-	public void setEpicDropChance(final int epicDropChance) {
-		this.epicDropChance = epicDropChance;
-	}
-
-	public double getLegendaryDropChance() {
-		return legendaryDropChance;
-	}
-
-	public void setLegendaryDropChance(final int legendaryDropChance) {
-		this.legendaryDropChance = legendaryDropChance;
 	}
 
 

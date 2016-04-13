@@ -20,7 +20,7 @@ public class GamestateHandler
     /**
      * Current gamestate that should be rendered and updated
      */
-    private Gamestate current;
+    private Gamestate currentGamestate;
 
     /**
      * instance of the gamestate handler
@@ -36,18 +36,22 @@ public class GamestateHandler
      */
     public void pushGamestate(Gamestate gamestate)
     {
-	gamestate.lastGamestate = INSTANCE.current;
-	INSTANCE.current = gamestate;
+	gamestate.lastGamestate = INSTANCE.currentGamestate;
+	INSTANCE.currentGamestate = gamestate;
     }
 
 
-    /**
+	public Gamestate getCurrentGamestate() {
+		return currentGamestate;
+	}
+
+	/**
      * Makes the given gamestate the current one to be rendered and updated. It will not keep the current gamestate so the user can't go back to it.
      * @param gamestate the gamestate that will be set
      */
     public void setGamestate(Gamestate gamestate)
     {
-	INSTANCE.current = gamestate;
+	INSTANCE.currentGamestate = gamestate;
     }
 
     /**
@@ -55,8 +59,8 @@ public class GamestateHandler
      */
     public void goBack()
     {
-	if(current.lastGamestate != null)
-	    current = current.lastGamestate;
+	if(currentGamestate.lastGamestate != null)
+	    currentGamestate = currentGamestate.lastGamestate;
     }
 
     /**
@@ -66,8 +70,8 @@ public class GamestateHandler
     public void goBack(int amount)
     {
 	for(int i = 0;i<amount;i++)
-	    if(current.lastGamestate != null)
-	  	current = current.lastGamestate;
+	    if(currentGamestate.lastGamestate != null)
+	  	currentGamestate = currentGamestate.lastGamestate;
     }
 
     /**
@@ -76,7 +80,7 @@ public class GamestateHandler
      */
     public void update(float deltaTime)
         {
-    	current.update(deltaTime);
+    	currentGamestate.update(deltaTime);
         }
 
     /**
@@ -84,7 +88,7 @@ public class GamestateHandler
      */
     public void tick()
     {
-    current.tick();
+    currentGamestate.tick();
     }
 
     /**
@@ -93,7 +97,7 @@ public class GamestateHandler
      */
     public void render(Graphics g)
     {
-	current.render(g);
+	currentGamestate.render(g);
     }
 
     /**

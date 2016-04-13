@@ -5,6 +5,8 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
  */
 
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
+
 import java.util.Random;
 
 import java.awt.*;
@@ -26,13 +28,17 @@ public class Item{
 		return stats;
 	}
 
+	public ItemType getItemType() {
+		return iType;
+	}
+
 	/**
 	 * This method is used to generate a new Item based on the current drop rates and the current floor.
 	 * @param  curTower The current tower object
 	 * @return A new item
 	 */
 
-	public static Item generateRandomItem(Tower curTower) {
+	public static Item generateRandomItem(StateTower curTower) {
 		Random rnd = new Random();
 		double drop = rnd.nextDouble();
 		Rarity thisRarity = null;

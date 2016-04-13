@@ -89,6 +89,18 @@ public class Stats
 		height = ROW_HEIGHT * 4 + BORDER_SIZE * 2;
 	}
 
+	public void decrease(Stats stat) {
+		this.initiative -= stat.initiative;
+		this.defense -= stat.defense;
+		this.attack -= stat.attack;
+	}
+
+	public void increase(Stats stat) {
+		this.initiative += stat.initiative;
+		this.defense += stat.defense;
+		this.attack += stat.attack;
+	}
+
 	/**
 	 * @return The width of the panel
 	 */

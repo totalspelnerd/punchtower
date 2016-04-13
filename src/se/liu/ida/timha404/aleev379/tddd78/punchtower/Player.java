@@ -1,121 +1,66 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.*;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents the playable character and is called whenever a new game starts.
  */
 
-public class Player
-{
-    
-	private String name;
+public class Player extends Entity{
+
+	public static final int ITEM_HEAD= 0;
+	public static final int ITEM_SHOULDER= 1;
+	public static final int ITEM_CHEST= 2;
+	public static final int ITEM_LEGS= 3;
+	public static final int ITEM_BOOTS= 4;
+	public static final int ITEM_WEAPON= 5;
+
 
 	private Image image;
 
-	private Stats stats;
-
-	private Item head = null;
-	private Item shoulder = null;
-	private Item chest = null;
-	private Item legs = null;
-	private Item boots = null;
-	private Item weapon = null;
+	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 
 
 	public Player(final String name, final int initiative, final int defense, final int attack) {
-		this.name = name;
+		super(new Stats(name, initiative, defense, attack), STANDARD_HP, name);
 		try {
 			image = ImageIO.read(new File("res/player.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		stats = new Stats(name, initiative, defense, attack);
 	}
 
-	public String getName() {
-		return name;
+	public Item getItem(final int itemIndex) {
+		return equipped[itemIndex];
 	}
 
-	public void setName(final String name) {
-		this.name = name;
+	/**
+	 * Equips the player with the given item and adjusts player stats accordingly.
+	 * @param item
+	 * @param itemIndex
+	 */
+
+	public void equip(final Item item, final int itemIndex) {
+		if (equipped[itemIndex] != null) {
+			stats.decrease(equipped[itemIndex].getStats());
+
+		}
+		this.equipped[itemIndex] = item;
+		stats.increase(equipped[itemIndex].getStats());
+
 	}
 
-	public int getInitiative() {
-		return stats.initiative;
+	public void attack() {
+		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
+		Combat.attack(this, monster, 0);
 	}
 
-	public void setInitiative(final int initiative) {
-		stats.initiative = initiative;
-	}
-
-	public int getDefense() {
-		return stats.defense;
-	}
-
-	public void setDefense(final int defense) {
-		stats.defense = defense;
-	}
-
-	public int getAttack() {
-		return stats.attack;
-	}
-
-	public void setAttack(final int attack) {
-		stats.attack = attack;
-	}
-
-    	// Change these to be called getHeadItem? To better understand the code.
-
-	public Item getHead() {
-		return head;
-	}
-
-	public void setHead(final Item head) {
-		this.head = head;
-	}
-
-	public Item getShoulder() {
-		return shoulder;
-	}
-
-	public void setShoulder(final Item shoulder) {
-		this.shoulder = shoulder;
-	}
-
-	public Item getChest() {
-		return chest;
-	}
-
-	public void setChest(final Item chest) {
-		this.chest = chest;
-	}
-
-	public Item getLegs() {
-		return legs;
-	}
-
-	public void setLegs(final Item legs) {
-		this.legs = legs;
-	}
-
-	public Item getBoots() {
-		return boots;
-	}
-
-	public void setBoots(final Item boots) {
-		this.boots = boots;
-	}
-
-	public Item getWeapon() {
-		return weapon;
-	}
-
-	public void setWeapon(final Item weapon) {
-		this.weapon = weapon;
-	}
 
 	public void render(Graphics g, int x, int y)
 	{

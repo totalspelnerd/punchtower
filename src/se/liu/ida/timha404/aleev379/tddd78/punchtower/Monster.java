@@ -1,5 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
@@ -8,63 +11,30 @@ import java.io.IOException;
 /**
  * This class is used to represent monsters
  */
-public class Monster{
+public class Monster extends Entity{
 
-	private String name;
 	private Image image;
-	private Stats stats;
 
 	public Monster(final String name, final int initiative, final int defense, final int attack) {
-		this.name = name;
+		super(new Stats(name, initiative, defense, attack), STANDARD_HP, name);
 		try {
 			this.image = ImageIO.read(new File("res/ogre.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		stats = new Stats(name, initiative, defense, attack);
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	public int getInitiative() {
-		return stats.initiative;
-	}
-
-	public void setInitiative(final int initiative) {
-		stats.initiative = initiative;
-	}
-
-	public int getDefense() {
-		return stats.defense;
-	}
-
-	public void setDefense(final int defense) {
-		stats.defense = defense;
-	}
-
-	public int getAttack() {
-		return stats.attack;
-	}
-
-	public void setAttack(final int attack) {
-		stats.attack = attack;
-	}
-
-	public Stats getStats()
-	{
-		return stats;
-	}
 
 	public void render(Graphics g, int x, int y)
 	{
 		stats.render(g,x,y,new Color(0xaa0000));
 		g.drawImage(image, x-400,y+200,450,400,null);
+	}
+
+	public void attack() {
+		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
+		Combat.attack(this, player, 0);
+
 	}
 
 	/**
