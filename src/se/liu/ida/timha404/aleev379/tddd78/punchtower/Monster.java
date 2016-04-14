@@ -7,33 +7,45 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * This class is used to represent monsters
  */
 public class Monster extends Entity{
 
-	private Image image;
+	private static Image image;
 
-	public Monster(final String name, final int initiative, final int defense, final int attack) {
-		super(new Stats(name, initiative, defense, attack), STANDARD_HP, name);
+	static {
 		try {
-			this.image = ImageIO.read(new File("res/ogre.png"));
+			image = ImageIO.read(new File("res/ogre.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	public void render(Graphics g, int x, int y)
-	{
-		stats.render(g,x,y,new Color(0xaa0000));
-		g.drawImage(image, x-400,y+200,450,400,null);
+	public Monster(final String name, final int initiative, final int attack, final int defense) {
+		super(new Stats(name, initiative, attack, defense), STANDARD_HP, name);
 	}
 
-	public void attack() {
+
+	public void render(Graphics g, int x, int y) {
+		stats.render(g,x,y,new Color(0xaa0000));
+		g.drawImage(image, x-400,y+200,450,400,null);
+		g.setColor(Color.red);
+		g.fillRect(x-210, y, 200, 20);
+		g.setColor(Color.green);
+		g.fillRect(x-210, y, (int)(200*(hp/(float)STANDARD_HP)), 20);
+
+	}
+
+	public AttackData attack() {
 		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
-		Combat.attack(this, player, 0);
+
+		if (hp <= 0) {
+			return new AttackData(this, player, false, false, false, 0);
+		}
+		return Combat.attack(this, player, new Random().nextInt(3));
 
 	}
 
@@ -42,9 +54,15 @@ public class Monster extends Entity{
 	 * @return thisMonster, a new monster
 	 */
 
-	public static Monster generateMonster() {
+	public static Monster generateMonster(int floor) {
+		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 		String type = MonsterType.randomMonsterType();
-		Monster thisMonster = new Monster(type, 1,2129,3);
+		double exponent = 1.3;
+		double monsterMod = 5;
+		int ini = (int)(player.getStats().initiative*0.9+player.getStats().initiative* new Random().nextDouble()*0.2);
+		int def = (int)((new Random().nextInt(100) + Math.pow(floor, exponent))*monsterMod);
+		int atk = (int)((new Random().nextInt(100) + Math.pow(floor, exponent))*monsterMod);
+		Monster thisMonster = new Monster(type, ini, atk, def);
 		return thisMonster;
 	}
 }

@@ -9,7 +9,14 @@ public class AttackData {
 	public boolean kill;
 	public int damage;
 
-	public AttackData() {
+	public AttackData(final Entity attacker, final Entity defender, final boolean hit, final boolean crit, final boolean kill,
+					  final int damage)
+	{
+		this.attacker = attacker;
+		this.defender = defender;
+		this.hit = hit;
+		this.crit = crit;
+		this.kill = kill;
+		this.damage = damage;
 	}
-
 }

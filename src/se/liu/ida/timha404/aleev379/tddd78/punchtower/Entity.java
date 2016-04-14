@@ -40,7 +40,7 @@ public abstract class Entity{
 		this.name = name;
 	}
 
-	public abstract void attack();
+	public abstract AttackData attack();
 	public abstract void render(Graphics g, int x, int y);
 
 

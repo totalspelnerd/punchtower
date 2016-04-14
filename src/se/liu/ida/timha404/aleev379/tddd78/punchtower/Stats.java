@@ -64,7 +64,7 @@ public class Stats
 	/**
 	 * This is the default font to draw the stats to the screen
 	 */
-	private static final Font defaultFont = new Font(Font.MONOSPACED, Font.PLAIN, 20);
+	public static final Font defaultFont = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 
 	public Stats(String header, int initiative, int defense, int attack)
 	{
@@ -73,20 +73,7 @@ public class Stats
 		this.defense = defense;
 		this.attack = attack;
 
-		// Get a FontMetrics from the canvas from the defaultFont (Used to calculate the size of the strings in the font)
-		FontMetrics fm = fontCanvas.getFontMetrics(defaultFont);
-
-		// Calculate the width of the panel with the given text to be rendered.
-		width = fm.stringWidth(header);
-		width = Math.max(fm.stringWidth("INI " + initiative), width);
-		width = Math.max(fm.stringWidth("ATK " + attack), width);
-		width = Math.max(fm.stringWidth("DEF " + defense), width);
-
-		// Add border and textoffset to the size
-		width += TEXT_OFFSET * 2 + BORDER_SIZE * 2;
-
-		// Calculate the height of the panel.
-		height = ROW_HEIGHT * 4 + BORDER_SIZE * 2;
+		updateSize();
 	}
 
 	public void decrease(Stats stat) {
@@ -99,6 +86,8 @@ public class Stats
 		this.initiative += stat.initiative;
 		this.defense += stat.defense;
 		this.attack += stat.attack;
+
+		updateSize();
 	}
 
 	/**
@@ -115,6 +104,23 @@ public class Stats
 	public int getHeight()
 	{
 		return height;
+	}
+
+	public void updateSize() {
+		// Get a FontMetrics from the canvas from the defaultFont (Used to calculate the size of the strings in the font)
+		FontMetrics fm = fontCanvas.getFontMetrics(defaultFont);
+
+		// Calculate the width of the panel with the given text to be rendered.
+		width = fm.stringWidth(header);
+		width = Math.max(fm.stringWidth("INI " + initiative), width);
+		width = Math.max(fm.stringWidth("ATK " + attack), width);
+		width = Math.max(fm.stringWidth("DEF " + defense), width);
+
+		// Add border and textoffset to the size
+		width += TEXT_OFFSET * 2 + BORDER_SIZE * 2;
+
+		// Calculate the height of the panel.
+		height = ROW_HEIGHT * 4 + BORDER_SIZE * 2;
 	}
 
 	/**

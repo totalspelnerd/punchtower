@@ -17,9 +17,9 @@ public class Item{
 	private Rarity rarity;
 
 
-	public Item(final ItemType iType,final int initiative,final int defense,final int attack, final Rarity rarity) {
+	public Item(final ItemType iType,final int initiative,final int attack, final int defense, final Rarity rarity) {
 		this.iType = iType;
-		stats = new Stats(iType.toString(), initiative, defense, attack);
+		stats = new Stats(iType.toString(), initiative, attack, defense);
 		this.rarity = rarity;
 	}
 
@@ -62,7 +62,7 @@ public class Item{
 		int ini = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
 		int def = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
 		int atk = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		Item thisItem = new Item(ItemType.randomItemType(),ini,def,atk,thisRarity);
+		Item thisItem = new Item(ItemType.randomItemType(),ini,atk,def,thisRarity);
 
 		return thisItem;
 	}

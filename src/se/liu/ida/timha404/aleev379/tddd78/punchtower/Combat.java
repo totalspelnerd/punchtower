@@ -15,10 +15,11 @@ public class Combat {
 	public static final int ATTACK_NORMAL = 1;
 	public static final int ATTACK_HEAVY = 2;
 
-	public static void attack(final Entity attacker, final Entity defender, final int attackType) {
+	public static final Random rnd = new Random();
+
+	public static AttackData attack(final Entity attacker, final Entity defender, final int attackType) {
 		boolean hit = false;
 		boolean crit = false;
-		Random rnd = new Random();
 		switch(attackType) {
 			case ATTACK_QUICK:
 				hit = (rnd.nextDouble() <= HIT_CHANCE_QUICK);
@@ -30,11 +31,27 @@ public class Combat {
 				break;
 			case ATTACK_HEAVY:
 				hit = (rnd.nextDouble() <= HIT_CHANCE_HEAVY);
-				crit = (rnd.nextDouble() <= HIT_CHANCE_HEAVY);
+				crit = (rnd.nextDouble() <= CRIT_CHANCE_HEAVY);
 				break;
 		}
-		//calcDamage(hit, crit);
+		return calcDamage(attacker, defender, hit, crit);
 
+	}
+
+	public static AttackData calcDamage(Entity attacker, Entity defender, boolean hit, boolean crit) {
+		int damage = rnd.nextInt(1000); //TODO: insert advanced formula here
+		if (attacker instanceof Player) {
+			damage *=2;
+		}
+		if (crit) {
+			damage *= (int) (rnd.nextDouble()*0.5+1.5); // These magic numbers are used to set the critical hit modifier.
+		}
+		boolean kill = (damage >= defender.hp);
+		defender.hp -= damage;
+		defender.hp = defender.hp < 0 ? 0 : defender.hp;
+		AttackData data =new AttackData(attacker, defender, hit, crit, kill, damage);
+
+		return data;
 	}
 
 }

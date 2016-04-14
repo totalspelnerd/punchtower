@@ -1,7 +1,7 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateIngame;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 /**
  * The meat of the game. Here is where the main gameloop is and where the game starts to run (main method). This class handles
@@ -40,6 +40,9 @@ public class PunchTower
 	 */
 	private int ups = 0;
 
+	private PunchFrame frame;// = new PunchFrame();
+
+
 	/**
 	 * Private since this should never be created anywhere else.<br> We will never have more than one instance of the game
 	 * running on one process (at the same time).
@@ -68,9 +71,9 @@ public class PunchTower
 		int updates = 0;
 
 		Timer timer = new Timer();
-		GamestateHandler.getInstance().setGamestate(new StateIngame());
-		PunchFrame frame = new PunchFrame();
-
+		StateTower tower = new StateTower();
+		frame = new PunchFrame();
+		GamestateHandler.getInstance().setGamestate(tower);
 		while (running) {
 			delta = timer.timeElapsed();
 			updateDelta += delta;
@@ -116,11 +119,6 @@ public class PunchTower
 		return fps;
 	}
 
-	public int getFames()
-	{
-		return frames;
-	}
-
 	public int getUPS()
 	{
 		return ups;
@@ -129,6 +127,10 @@ public class PunchTower
 	public void addFrames()
 	{
 		frames++;
+	}
+
+	public PunchFrame getFrame() {
+		return frame;
 	}
 
 	/**

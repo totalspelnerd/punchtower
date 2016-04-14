@@ -27,12 +27,16 @@ public class Player extends Entity{
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 
 
-	public Player(final String name, final int initiative, final int defense, final int attack) {
-		super(new Stats(name, initiative, defense, attack), STANDARD_HP, name);
+	public Player(final String name, final int initiative, final int attack, final int defense) {
+		super(new Stats(name, initiative, attack, defense), STANDARD_HP, name);
 		try {
 			image = ImageIO.read(new File("res/player.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		for (int i = 0; i < equipped.length; i++) {
+			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i);
+
 		}
 	}
 
@@ -56,15 +60,23 @@ public class Player extends Entity{
 
 	}
 
-	public void attack() {
+	public AttackData attack() {
 		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
-		Combat.attack(this, monster, 0);
+		if (hp <= 0) {
+			return new AttackData(this, monster, false, false, false, 0);
+		}
+		return Combat.attack(this, monster, 0);
 	}
 
 
 	public void render(Graphics g, int x, int y)
 	{
 		stats.render(g,x,y,new Color(0x00bb00));
-		g.drawImage(image,x+200,y+200,200,400,null);
+		g.drawImage(image,x+100,y+200,200,400,null);
+		g.setColor(Color.red);
+		g.fillRect(x+stats.getWidth()+10, y, 200, 20);
+		g.setColor(Color.green);
+		g.fillRect(x+stats.getWidth()+10, y, (int)(200*(hp/(float)STANDARD_HP)), 20);
+
 	}
 }

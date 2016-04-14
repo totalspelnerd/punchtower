@@ -14,6 +14,8 @@ public abstract class Gamestate
      */
     public Gamestate lastGamestate = null;
 
+    public abstract void init();
+
     /**
      * Update the game logic
      * @param timeElapsed time elapsed since last update.

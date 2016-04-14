@@ -13,7 +13,7 @@ public class PunchFrame extends JFrame
     /**
      * The content pane of the frame.
      */
-    PunchPanel panel;
+    private PunchPanel panel;
 
     /**
      * Initializer for the PunchFrame.
@@ -32,7 +32,11 @@ public class PunchFrame extends JFrame
 	setVisible(true);
     }
 
-    /**
+	public PunchPanel getPanel() {
+		return panel;
+	}
+
+	/**
      * Updates the panel which will update the current gamestate.
      * @param deltaTime time since last update.
      */

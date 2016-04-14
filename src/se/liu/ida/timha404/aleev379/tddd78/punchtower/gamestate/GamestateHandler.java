@@ -27,6 +27,8 @@ public class GamestateHandler
      */
     private static final GamestateHandler INSTANCE = new GamestateHandler();
 
+	private boolean hasInit = false;
+
     private GamestateHandler(){}
 
 
@@ -36,9 +38,12 @@ public class GamestateHandler
      */
     public void pushGamestate(Gamestate gamestate)
     {
-	gamestate.lastGamestate = INSTANCE.currentGamestate;
-	INSTANCE.currentGamestate = gamestate;
-    }
+		hasInit = false;
+		gamestate.lastGamestate = INSTANCE.currentGamestate;
+		INSTANCE.currentGamestate = gamestate;
+		gamestate.init();
+		hasInit = true;
+	}
 
 
 	public Gamestate getCurrentGamestate() {
@@ -51,8 +56,11 @@ public class GamestateHandler
      */
     public void setGamestate(Gamestate gamestate)
     {
-	INSTANCE.currentGamestate = gamestate;
-    }
+		hasInit = false;
+		INSTANCE.currentGamestate = gamestate;
+		gamestate.init();
+		hasInit = true;
+	}
 
     /**
      * Goes back to the last gametate
@@ -97,7 +105,8 @@ public class GamestateHandler
      */
     public void render(Graphics g)
     {
-	currentGamestate.render(g);
+		if(hasInit)
+			currentGamestate.render(g);
     }
 
     /**
