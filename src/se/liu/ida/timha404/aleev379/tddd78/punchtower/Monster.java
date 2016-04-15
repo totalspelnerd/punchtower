@@ -39,7 +39,7 @@ public class Monster extends Entity{
 
 	}
 
-	public AttackData attack() {
+	public AttackData attack(int attackType) {
 		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 
 		if (hp <= 0) {
@@ -57,11 +57,24 @@ public class Monster extends Entity{
 	public static Monster generateMonster(int floor) {
 		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 		String type = MonsterType.randomMonsterType();
+		int ini = 0;
+		int atk = 0;
+		int def = 0;
 		double exponent = 1.3;
 		double monsterMod = 5;
-		int ini = (int)(player.getStats().initiative*0.9+player.getStats().initiative* new Random().nextDouble()*0.2);
-		int def = (int)((new Random().nextInt(100) + Math.pow(floor, exponent))*monsterMod);
-		int atk = (int)((new Random().nextInt(100) + Math.pow(floor, exponent))*monsterMod);
+		double base = 1.023151432;
+		double start = 1077.587445;
+		double statBase = start * Math.pow(base, floor);
+		double lowFloorMod = Math.min(14/floor, 400) + 100;
+		if (floor < 13) {
+			ini = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
+			def = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
+			atk = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
+		}else {
+			ini = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
+			def = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
+			atk = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
+		}
 		Monster thisMonster = new Monster(type, ini, atk, def);
 		return thisMonster;
 	}

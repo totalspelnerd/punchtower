@@ -23,7 +23,7 @@ import java.util.Random;
 public class StateTower extends Gamestate{
     Item item = null;
 	Image image = null;
-	private int floor;
+	public static int floor;
 	private double normalDropChance = 1.0;
 	private double rareDropChance = 0.1;
 	private double epicDropChance = 0.05;
@@ -31,6 +31,7 @@ public class StateTower extends Gamestate{
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
+	//private int attackType = 0;
     public StateTower() {
 	}
 	public void init() {
@@ -49,18 +50,43 @@ public class StateTower extends Gamestate{
 		temp.getActionMap().put("equipItem", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
-				nextFloor();
+				if (floorClear) {
+					player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
+					nextFloor();
+				}
 			}
 		});
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"),"skipEquip");
 		temp.getActionMap().put("skipEquip", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				nextFloor();
+				if (floorClear) {
+					nextFloor();
+				}
 			}
 		});
 
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"),"quickAttack");
+		temp.getActionMap().put("quickAttack", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				attackEvent(0);
+			}
+		});
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),"normalAttack");
+		temp.getActionMap().put("normalAttack", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				attackEvent(1);
+			}
+		});
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),"heavyAttack");
+		temp.getActionMap().put("heavyAttack", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				attackEvent(2);
+			}
+		});
 		}
 
 
@@ -140,21 +166,25 @@ public class StateTower extends Gamestate{
 
 	public void tick()
 	{
-		if (floorClear) {
-			return;
-		}
-		AttackData monsterData = null;
-		if (player.getStats().initiative >= monster.getStats().initiative) {
-			playerAttack();
-			monsterAttack();
-		} else {
-			monsterAttack();
-			playerAttack();
-		}
+
 	}
 
-	public AttackData playerAttack() {
-		AttackData playerData = player.attack();
+	public void attackEvent (int type) {
+		if (floorClear) {
+					return;
+				}
+				AttackData monsterData = null;
+				if (player.getStats().initiative >= monster.getStats().initiative) {
+					playerAttack(type);
+					monsterAttack();
+				} else {
+					monsterAttack();
+					playerAttack(type);
+				}
+	}
+
+	public AttackData playerAttack(int type) {
+		AttackData playerData = player.attack(type);
 		if (playerData.kill) {
 
 			floorClear = true;
@@ -163,7 +193,7 @@ public class StateTower extends Gamestate{
 	}
 
 	public AttackData monsterAttack() {
-		AttackData monsterData = monster.attack();
+		AttackData monsterData = monster.attack(0);
 		if (monsterData.kill) {
 			gameOver();
 		}
@@ -197,10 +227,17 @@ public class StateTower extends Gamestate{
 
 		} else {
 			monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, 40);
+			renderTextShadow(g, "1: quick attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2-25, true);
+			renderTextShadow(g, "2: normal attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2, true);
+			renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2+25, true);
 		}
 		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,80));
 		g.setColor(Color.WHITE);
 		renderTextShadow(g, "Floor:"+floor, PunchPanel.WIDTH/2, 100, true);
+		if (floor < 13) {
+			g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,40));
+			renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, 180, true);
+		}
     }
 
 	public void renderTextShadow(Graphics g, String text, int x, int y, boolean center) {

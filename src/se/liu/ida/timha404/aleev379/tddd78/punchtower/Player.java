@@ -60,12 +60,12 @@ public class Player extends Entity{
 
 	}
 
-	public AttackData attack() {
+	public AttackData attack(int attackType) {
 		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
 		if (hp <= 0) {
 			return new AttackData(this, monster, false, false, false, 0);
 		}
-		return Combat.attack(this, monster, 0);
+		return Combat.attack(this, monster, attackType);
 	}
 
 
