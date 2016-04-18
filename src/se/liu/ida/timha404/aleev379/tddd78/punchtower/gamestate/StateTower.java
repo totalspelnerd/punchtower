@@ -23,24 +23,32 @@ import java.util.Random;
 public class StateTower extends Gamestate{
     Item item = null;
 	Image image = null;
+	Image deadText = null;
 	public static int floor;
+	public static final int STD_INI = 50;
+	public static final int STD_ATK = 50;
+	public static final int STD_DEF = 50;
+
 	private double normalDropChance = 1.0;
-	private double rareDropChance = 0.1;
-	private double epicDropChance = 0.05;
-	private double legendaryDropChance = 0.01;
+	private double rareDropChance = 0.2;
+	private double epicDropChance = 0.1;
+	private double legendaryDropChance = 0.05;
+
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
+	private boolean newGame = false;
 	//private int attackType = 0;
-    public StateTower() {
-	}
+    //public StateTower() {
+//	}
 	public void init() {
 		floor = 1;
 		item = Item.generateRandomItem(this);
-		player = new Player("TOP KEK", 50, 50, 50);
+		player = new Player("TOP KEK", STD_INI, STD_ATK, STD_DEF);
 		monster = Monster.generateMonster(floor);
 		try {
 			image = ImageIO.read(new File("res/stone-wall-texture-wallpaper-2.jpg"));
+			deadText = ImageIO.read(new File("res/dead.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,6 +68,9 @@ public class StateTower extends Gamestate{
 		temp.getActionMap().put("skipEquip", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
+				if (newGame) {
+					startOver();
+				}
 				if (floorClear) {
 					nextFloor();
 				}
@@ -87,6 +98,13 @@ public class StateTower extends Gamestate{
 				attackEvent(2);
 			}
 		});
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"),"exit");
+		temp.getActionMap().put("exit", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				gameOver();
+			}
+		});
 		}
 
 
@@ -103,11 +121,26 @@ public class StateTower extends Gamestate{
 		if (totalNewStats >totalCurStats )
 			player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
 		*/
+		newGame = false;
 		this.floor++;
 		monster = Monster.generateMonster(floor);
 		player.setHp(Entity.STANDARD_HP);
 		item = Item.generateRandomItem(this);
 		floorClear = false;
+	}
+
+	public void startOver() {
+		newGame = false;
+		floor = 1;
+		player = new Player(player.getName(), STD_INI, STD_ATK, STD_DEF);
+		monster = Monster.generateMonster(floor);
+		player.setHp(Entity.STANDARD_HP);
+		item = Item.generateRandomItem(this);
+		floorClear = false;
+	}
+
+	public void gameOver() {
+		System.exit(0);
 	}
 
 	public double getNormalDropChance() {
@@ -170,17 +203,17 @@ public class StateTower extends Gamestate{
 	}
 
 	public void attackEvent (int type) {
-		if (floorClear) {
-					return;
-				}
-				AttackData monsterData = null;
-				if (player.getStats().initiative >= monster.getStats().initiative) {
-					playerAttack(type);
-					monsterAttack();
-				} else {
-					monsterAttack();
-					playerAttack(type);
-				}
+		if (floorClear)
+		{
+			return;
+		}
+		if (player.getStats().initiative >= monster.getStats().initiative) {
+			playerAttack(type);
+			monsterAttack();
+		} else {
+			monsterAttack();
+			playerAttack(type);
+		}
 	}
 
 	public AttackData playerAttack(int type) {
@@ -195,14 +228,12 @@ public class StateTower extends Gamestate{
 	public AttackData monsterAttack() {
 		AttackData monsterData = monster.attack(0);
 		if (monsterData.kill) {
-			gameOver();
+			newGame = true;
+
 		}
 		return monsterData;
 	}
 
-	public void gameOver() {
-		System.exit(0);
-	}
 
     @Override
     public void render(final Graphics g)
@@ -210,8 +241,7 @@ public class StateTower extends Gamestate{
 		g.drawImage(image,0,0,1280,720,null);
 		player.render(g,10,40);
 
-		if(floorClear)
-		{
+		if(floorClear) {
 
 			item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
 			Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
@@ -231,6 +261,11 @@ public class StateTower extends Gamestate{
 			renderTextShadow(g, "2: normal attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2, true);
 			renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2+25, true);
 		}
+		if (newGame) {
+			g.drawImage(deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
+			renderTextShadow(g, "Press ENTER to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
+		}
+
 		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,80));
 		g.setColor(Color.WHITE);
 		renderTextShadow(g, "Floor:"+floor, PunchPanel.WIDTH/2, 100, true);

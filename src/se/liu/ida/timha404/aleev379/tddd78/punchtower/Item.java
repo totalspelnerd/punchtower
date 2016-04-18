@@ -59,9 +59,21 @@ public class Item{
 		}
 
 		double exponent = 1.3;
-		int ini = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		int def = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		int atk = (int)(new Random().nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		int ini = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		int def = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		int atk = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		if (rnd.nextDouble() >= 0.5) {
+			int temping = rnd.nextInt(3);
+			switch(temping) {
+				case 0:
+					ini *=(int) rarityMod;
+				case 1:
+					atk *=(int) rarityMod;
+				case 2:
+					def *=(int) rarityMod;
+			}
+		}
+
 		Item thisItem = new Item(ItemType.randomItemType(),ini,atk,def,thisRarity);
 
 		return thisItem;

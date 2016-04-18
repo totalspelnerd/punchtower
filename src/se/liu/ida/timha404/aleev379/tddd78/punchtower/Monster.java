@@ -16,6 +16,8 @@ public class Monster extends Entity{
 
 	private static Image image;
 
+	public static Random rnd = new Random();
+
 	static {
 		try {
 			image = ImageIO.read(new File("res/ogre.png"));
@@ -45,7 +47,7 @@ public class Monster extends Entity{
 		if (hp <= 0) {
 			return new AttackData(this, player, false, false, false, 0);
 		}
-		return Combat.attack(this, player, new Random().nextInt(3));
+		return Combat.attack(this, player, rnd.nextInt(3));
 
 	}
 
@@ -67,13 +69,13 @@ public class Monster extends Entity{
 		double statBase = start * Math.pow(base, floor);
 		double lowFloorMod = Math.min(14/floor, 400) + 100;
 		if (floor < 13) {
-			ini = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
-			def = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
-			atk = (int) ((statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)-lowFloorMod)/3;
+			ini = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;
+			def = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;
+			atk = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;
 		}else {
-			ini = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
-			def = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
-			atk = (int) (statBase * 0.9 + statBase * new Random().nextDouble() * 0.3)/3;
+			ini = (int) (statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)/3;
+			def = (int) (statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)/3;
+			atk = (int) (statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)/3;
 		}
 		Monster thisMonster = new Monster(type, ini, atk, def);
 		return thisMonster;
