@@ -1,6 +1,7 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 /**
@@ -73,7 +74,7 @@ public class PunchTower
 		Timer timer = new Timer();
 		StateTower tower = new StateTower();
 		frame = new PunchFrame();
-		GamestateHandler.getInstance().setGamestate(tower);
+		GamestateHandler.getInstance().setGamestate(new StateMenu());
 		while (running) {
 			delta = timer.timeElapsed();
 			updateDelta += delta;

@@ -2,6 +2,7 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Entity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Monster;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Player;
@@ -22,8 +23,6 @@ import java.util.Random;
 
 public class StateTower extends Gamestate{
     Item item = null;
-	Image image = null;
-	Image deadText = null;
 	public static int floor;
 	public static final int STD_INI = 50;
 	public static final int STD_ATK = 50;
@@ -46,12 +45,7 @@ public class StateTower extends Gamestate{
 		item = Item.generateRandomItem(this);
 		player = new Player("TOP KEK", STD_INI, STD_ATK, STD_DEF);
 		monster = Monster.generateMonster(floor);
-		try {
-			image = ImageIO.read(new File("res/stone-wall-texture-wallpaper-2.jpg"));
-			deadText = ImageIO.read(new File("res/dead.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 
 		PunchPanel temp = PunchTower.getInstance().getFrame().getPanel();
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("E"),"equipItem");
@@ -238,7 +232,7 @@ public class StateTower extends Gamestate{
     @Override
     public void render(final Graphics g)
     {
-		g.drawImage(image,0,0,1280,720,null);
+		g.drawImage(ImageLoader.background, 0, 0, 1280, 720, null);
 		player.render(g,10,40);
 
 		if(floorClear) {
@@ -262,7 +256,7 @@ public class StateTower extends Gamestate{
 			renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2+25, true);
 		}
 		if (newGame) {
-			g.drawImage(deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
+			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
 			renderTextShadow(g, "Press ENTER to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
 		}
 
@@ -275,14 +269,4 @@ public class StateTower extends Gamestate{
 		}
     }
 
-	public void renderTextShadow(Graphics g, String text, int x, int y, boolean center) {
-		if (center) {
-			x-=g.getFontMetrics().stringWidth(text)/2;
-		}
-		g.setColor(Color.BLACK);
-		g.drawString(text, x + 2, y + 2);
-		g.setColor(Color.WHITE);
-		g.drawString(text, x, y);
-
-	}
 }

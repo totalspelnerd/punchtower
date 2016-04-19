@@ -53,7 +53,7 @@ public class Item{
 		} else if (drop <= curTower.getRareDropChance()) {
 			thisRarity = Rarity.RARE;
 			rarityMod = 1.5;
-		} else if (drop <= curTower.getNormalDropChance()) {
+		} else { //if (drop <= curTower.getNormalDropChance()) {
 			thisRarity = Rarity.NORMAL;
 			rarityMod = 1;
 		}
