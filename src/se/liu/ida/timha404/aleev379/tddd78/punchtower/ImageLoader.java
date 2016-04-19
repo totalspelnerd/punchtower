@@ -5,12 +5,32 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageLoader{
+/**
+ * This class loads all of the needed images in our game.
+ */
+public final class ImageLoader{
 
-	public static Image background;
-	public static Image deadText;
-	public static Image monster;
-	public static Image player;
+	/**
+	 * Background image of our game. No need to load more than one
+	 */
+	public static Image background = null;
+
+	/**
+	 * The image of the text when you die. No need to load more than one
+	 */
+	public static Image deadText = null;
+
+	/**
+	 * The image of monster. No need to load more than one
+	 */
+	public static Image monster = null;
+
+	/**
+	 * The image of player. No need to load more than one
+	 */
+	public static Image player = null;
+
+	private ImageLoader(){}
 
 	static {
 		try {

@@ -11,15 +11,18 @@ import java.util.Random;
 
 import java.awt.*;
 
+/**
+ * This class represents the items in our game. Containing a stat, rarity and type.
+ */
 public class Item{
-	private ItemType iType;
+	private ItemType itemType;
 	private Stats stats;
 	private Rarity rarity;
 
 
-	public Item(final ItemType iType,final int initiative,final int attack, final int defense, final Rarity rarity) {
-		this.iType = iType;
-		stats = new Stats(iType.toString(), initiative, attack, defense);
+	public Item(final ItemType itemType,final int initiative,final int attack, final int defense, final Rarity rarity) {
+		this.itemType = itemType;
+		stats = new Stats(itemType.toString(), initiative, attack, defense);
 		this.rarity = rarity;
 	}
 
@@ -29,7 +32,7 @@ public class Item{
 	}
 
 	public ItemType getItemType() {
-		return iType;
+		return itemType;
 	}
 
 	/**
@@ -67,10 +70,13 @@ public class Item{
 			switch(temping) {
 				case 0:
 					ini *=(int) rarityMod;
+					break;
 				case 1:
 					atk *=(int) rarityMod;
+					break;
 				case 2:
 					def *=(int) rarityMod;
+					break;
 			}
 		}
 

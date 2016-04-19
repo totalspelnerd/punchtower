@@ -4,23 +4,21 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Entity;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Monster;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Player;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
 
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.Random;
 
+/**
+ * Gamestate of our game. Here is where our game updates and renders. The main game logic is here.
+ */
 public class StateTower extends Gamestate{
     Item item = null;
 	public static int floor;

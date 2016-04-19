@@ -9,11 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * This is pretty much the tutorial of our game. It describes the basic controlls of the game.
+ */
 public class StateInformation extends Gamestate
 {
 
-	String character;
-	int state = 0;
+	private String character;
+	private int state = 0;
 
 	public StateInformation(int character)
 	{

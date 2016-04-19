@@ -1,12 +1,9 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.*;
 
-import javax.imageio.ImageIO;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
+
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class represents the playable character and is called whenever a new game starts.

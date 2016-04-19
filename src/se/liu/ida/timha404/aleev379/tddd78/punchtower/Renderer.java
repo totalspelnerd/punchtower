@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.Color;
 
+/**
+ * This class handles all of our type of rendering we do on multiple places. Generally to make text look the same.
+ */
 public final class Renderer
 {
 

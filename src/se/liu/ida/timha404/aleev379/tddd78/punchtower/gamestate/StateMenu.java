@@ -9,11 +9,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * This is our main menu. Where the player can choose a character and the carry on to play the game.
+ */
 public class StateMenu extends Gamestate {
 
+	/**
+	 * Names of all the playable characters. This doesn't need to be created more than once since it's always the same.
+	 */
 	public static final String[] names = {"Spastic Stan","Brutal Brick","Tanking Ted"};
 
-	@Override public void init() {
+	@Override
+	public void init() {
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
 		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "stan");
 		panel.getActionMap().put("stan", new AbstractAction()
@@ -42,11 +49,13 @@ public class StateMenu extends Gamestate {
 
 	}
 
-	@Override public void update(final float timeElapsed) {
+	@Override
+	public void update(final float timeElapsed) {
 
 	}
 
-	@Override public void render(final Graphics g) {
+	@Override
+	public void render(final Graphics g) {
 		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 
 		String description = "HELLO AND WELCOME ADVENTURER!\nDo you wish to wander up a tower and get some epic loot? If yes, then this is the game for you!\nIf no, you might as well just turn of the game.\nTo begin with I need to know who you are.\n\nChoose a character below with 1-3 on your keyboard. You do have a keyboard, right?";

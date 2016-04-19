@@ -7,9 +7,10 @@ import java.util.Random;
  */
 
 public enum ItemType{
+	// These are all enums for keeping track of different gear. Names are for respective item slot.
 	HEAD, SHOULDER, CHEST, LEGS, BOOTS, WEAPON;
 
-	private static Random rnd = new Random();
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * This method is used to generate a random item type for item generation.
@@ -17,7 +18,7 @@ public enum ItemType{
 	 */
 
 	public static ItemType randomItemType() {
-		int pick = rnd.nextInt(ItemType.values().length);
+		int pick = RANDOM.nextInt(ItemType.values().length);
 		return ItemType.values()[pick];
 	}
 }

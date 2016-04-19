@@ -62,7 +62,6 @@ public class PunchTower
 	private void run()
 	{
 
-		float delta;
 		float updateTime = 1.0f / UPDATES_PER_SECOND;
 		float updateDelta = 0;
 		float renderTime = 1.0f / FRAME_CAP;
@@ -77,10 +76,10 @@ public class PunchTower
 		frame = new PunchFrame();
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
 		while (running) {
-			delta = timer.timeElapsed();
-			updateDelta += delta;
-			frameDelta += delta;
-			renderDelta += delta;
+			float deltaTime = timer.timeElapsed();
+			updateDelta += deltaTime;
+			frameDelta += deltaTime;
+			renderDelta += deltaTime;
 			if (updateDelta >= updateTime) {
 				frame.update(updateTime);
 				updates++;

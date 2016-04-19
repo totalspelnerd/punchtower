@@ -2,15 +2,21 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import java.awt.*;
 
+/**
+ * Entity is something that can fight something else in the game.
+ */
 public abstract class Entity{
 
+	/**
+	 * The standard hp for normal enemies and players.
+	 */
 	public static final int STANDARD_HP = 10000;
 
 	protected Stats stats;
 	protected int hp;
 	protected String name;
 
-	public Entity(final Stats stats, final int hp, final String name) {
+	protected Entity(final Stats stats, final int hp, final String name) {
 		this.stats = stats;
 		this.hp = hp;
 		this.name = name;

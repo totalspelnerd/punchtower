@@ -1,5 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+/**
+ * This class is a simple data class that only contains data about a single attack. Used for logging and rendering
+ */
 public class AttackData {
 
 	public Entity attacker;
