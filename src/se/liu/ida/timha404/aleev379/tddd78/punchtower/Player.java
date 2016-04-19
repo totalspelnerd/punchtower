@@ -22,18 +22,11 @@ public class Player extends Entity{
 	public static final int ITEM_WEAPON= 5;
 
 
-	private Image image;
-
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 
 
 	public Player(final String name, final int initiative, final int attack, final int defense) {
 		super(new Stats(name, initiative, attack, defense), STANDARD_HP, name);
-		try {
-			image = ImageIO.read(new File("res/player.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		for (int i = 0; i < equipped.length; i++) {
 			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i);
 
@@ -72,7 +65,7 @@ public class Player extends Entity{
 	public void render(Graphics g, int x, int y)
 	{
 		stats.render(g,x,y,new Color(0x00bb00));
-		g.drawImage(image,x+100,y+200,200,400,null);
+		g.drawImage(ImageLoader.player,x+100,y+200,200,400,null);
 		g.setColor(Color.red);
 		g.fillRect(x+stats.getWidth()+10, y, 200, 20);
 		g.setColor(Color.green);

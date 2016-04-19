@@ -14,17 +14,7 @@ import java.util.Random;
  */
 public class Monster extends Entity{
 
-	private static Image image;
-
 	public static Random rnd = new Random();
-
-	static {
-		try {
-			image = ImageIO.read(new File("res/ogre.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public Monster(final String name, final int initiative, final int attack, final int defense) {
 		super(new Stats(name, initiative, attack, defense), STANDARD_HP, name);
@@ -33,7 +23,7 @@ public class Monster extends Entity{
 
 	public void render(Graphics g, int x, int y) {
 		stats.render(g,x,y,new Color(0xaa0000));
-		g.drawImage(image, x-400,y+200,450,400,null);
+		g.drawImage(ImageLoader.monster, x-400,y+200,450,400,null);
 		g.setColor(Color.red);
 		g.fillRect(x-210, y, 200, 20);
 		g.setColor(Color.green);

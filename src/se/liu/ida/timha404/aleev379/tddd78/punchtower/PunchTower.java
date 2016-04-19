@@ -1,6 +1,7 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateInformation;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
