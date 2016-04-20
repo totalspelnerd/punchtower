@@ -11,8 +11,8 @@ public class Combat {
 
 	// The hit chance of the different attacks
 	public static final double HIT_CHANCE_QUICK = 1.0;
-	public static final double HIT_CHANCE_NORMAL = 0.75;
-	public static final double HIT_CHANCE_HEAVY = 0.55;
+	public static final double HIT_CHANCE_NORMAL = 0.85;
+	public static final double HIT_CHANCE_HEAVY = 0.75;
 
 	// The crit chance of the different attacks
 	public static final double CRIT_CHANCE_QUICK = 0.05;
@@ -21,8 +21,8 @@ public class Combat {
 
 	// The damage modifier for the different attacks
 	public static final double QUICK_MOD = 1;
-	public static final double NORMAL_MOD = 1.2;
-	public static final double HEAVY_MOD = 1.7;
+	public static final double NORMAL_MOD = 1.4;
+	public static final double HEAVY_MOD = 2;
 
 	// The index of the attack
 	public static final int ATTACK_QUICK = 0;
@@ -63,9 +63,9 @@ public class Combat {
 
 	public static AttackData calcDamage(Entity attacker, Entity defender, boolean hit, boolean crit, double typeMod) {
 
-		int damage = (int) (attacker.getStats().attack*(defender.getStats().defense / (defender.getStats().defense*1.1 + 100))*typeMod);
+		int damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
 		if (attacker instanceof Player && StateTower.floor < 13) {
-			damage *=2;
+			damage *= 2;
 		}
 		if (crit) {
 			damage *= (int) (RANDOM.nextDouble()*0.5+1.7); // These magic numbers are used to set the critical hit modifier.

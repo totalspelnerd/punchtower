@@ -39,7 +39,8 @@ public class PunchPanel extends JPanel implements KeyListener
 		super.paintComponent(g);
 		GamestateHandler.getInstance().render(g);
 		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,20));
-		g.drawString(Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,20);
+		g.setColor(Color.WHITE);
+		Renderer.renderTextShadow(g,Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,20,false);
 		PunchTower.getInstance().addFrames();
     }
 

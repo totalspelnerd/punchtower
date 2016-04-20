@@ -154,4 +154,9 @@ public class Stats
 		g.drawString("DEF " + defense, x + BORDER_SIZE+TEXT_OFFSET, y + STARTY + ROW_HEIGHT * 3);
 
 	}
+
+	public Stats clone()
+	{
+		return new Stats(header,initiative,attack,defense);
+	}
 }

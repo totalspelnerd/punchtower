@@ -15,12 +15,12 @@ import java.awt.event.ActionEvent;
 public class StateInformation extends Gamestate
 {
 
-	private String character;
+	private int playerIndex;
 	private int state = 0;
 
-	public StateInformation(int character)
+	public StateInformation(int playerIndex)
 	{
-		this.character = StateMenu.names[character];
+		this.playerIndex= playerIndex;
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
 		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "next");
 		panel.getActionMap().put("next", new AbstractAction()
@@ -31,7 +31,7 @@ public class StateInformation extends Gamestate
 				{
 					panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
 					panel.getActionMap().remove("next");
-					GamestateHandler.getInstance().pushGamestate(new StateTower());
+					GamestateHandler.getInstance().pushGamestate(new StateTower(StateInformation.this.playerIndex));
 				}
 			}
 		});
@@ -57,7 +57,7 @@ public class StateInformation extends Gamestate
 		switch(state)
 		{
 			case 0:
-				text = "So you are " + character + ", huh? Never heard of you.\nAs you will see the mechanics of the game is quite simple. A monster appears and you can choose between three different attacks. Quick, normal and heavy, these are chosen with the buttons 1-3 on your keyboard.\n\nPress space to continue.";
+				text = "So you are " + StateMenu.names[playerIndex] + ", huh? Never heard of you.\nAs you will see the mechanics of the game is quite simple. A monster appears and you can choose between three different attacks. Quick, normal and heavy, these are chosen with the buttons 1-3 on your keyboard.\n\nPress space to continue.";
 				break;
 			case 1:
 				text = "When you killed a monster with your amazing skills, he will drop a loot for you. The loot are armor or weapons you can use in furure fights. If you want to replace your current item you press E, if not press ENTER.\n\nPress SPACE to continue.";

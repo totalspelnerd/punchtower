@@ -77,4 +77,14 @@ public final class Renderer
 			renderTextShadow(g, complete.get(i), x, (int) (y + g.getFont().getSize()+ i * g.getFont().getSize() * 5.0 / 4.0), false); // The division 5.0/4.0 is to get a margin between lines of text
 		}
 	}
+
+	public static void renderProgression(Graphics g, int x, int y, int width, int height, Color back, Color front, int min, int max, int value)
+	{
+		int diff = max-min;
+		value -= min;
+		g.setColor(back);
+		g.fillRect(x,y,width,height);
+		g.setColor(front);
+		g.fillRect(x,y,width*value/diff,height);
+	}
 }

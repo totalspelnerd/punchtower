@@ -5,6 +5,9 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateInformation
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+
 /**
  * The meat of the game. Here is where the main gameloop is and where the game starts to run (main method). This class handles
  * all the calling to the drawing / updates.
@@ -72,8 +75,14 @@ public class PunchTower
 		int updates = 0;
 
 		Timer timer = new Timer();
-		StateTower tower = new StateTower();
 		frame = new PunchFrame();
+		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
+		frame.getPanel().getActionMap().put("exit", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
 		while (running) {
 			float deltaTime = timer.timeElapsed();

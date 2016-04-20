@@ -1,6 +1,7 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import java.awt.*;
@@ -18,15 +19,18 @@ public class Player extends Entity{
 	public static final int ITEM_BOOTS= 4;
 	public static final int ITEM_WEAPON= 5;
 
+	private int playerIndex;
+
+
 
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 
 
-	public Player(final String name, final int initiative, final int attack, final int defense) {
-		super(new Stats(name, initiative, attack, defense), STANDARD_HP, name);
+	public Player(int playerIndex, final int initiative, final int attack, final int defense) {
+		super(new Stats(StateMenu.names[playerIndex], initiative, attack, defense), STANDARD_HP, StateMenu.names[playerIndex]);
+		this.playerIndex = playerIndex;
 		for (int i = 0; i < equipped.length; i++) {
 			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i);
-
 		}
 	}
 
@@ -41,12 +45,35 @@ public class Player extends Entity{
 	 */
 
 	public void equip(final Item item, final int itemIndex) {
+		Stats temp = stats.clone();
 		if (equipped[itemIndex] != null) {
 			stats.decrease(equipped[itemIndex].getStats());
 
 		}
 		this.equipped[itemIndex] = item;
 		stats.increase(equipped[itemIndex].getStats());
+		switch (playerIndex) {
+			case 0:
+				System.out.println(temp.initiative+" : " + stats.initiative);
+				if (temp.initiative < stats.initiative) {
+					stats.initiative += (int) Math.max(30, temp.initiative*0.1f);
+				}
+				break;
+			case 1:
+				if (temp.attack < stats.attack) {
+					stats.defense -= (25);
+					stats.attack += (int) Math.max(20, temp.attack*0.05f);
+				}
+				break;
+			case 2:
+				if (temp.defense < stats.defense) {
+					stats.attack -= (25);
+					stats.defense += (int) Math.max(50, temp.defense*0.07f);
+				}
+				break;
+		}
+
+
 
 	}
 
@@ -63,10 +90,7 @@ public class Player extends Entity{
 	{
 		stats.render(g,x,y,new Color(0x00bb00));
 		g.drawImage(ImageLoader.player,x+100,y+200,200,400,null);
-		g.setColor(Color.red);
-		g.fillRect(x+stats.getWidth()+10, y, 200, 20);
-		g.setColor(Color.green);
-		g.fillRect(x+stats.getWidth()+10, y, (int)(200*(hp/(float)STANDARD_HP)), 20);
-
+		Renderer.renderProgression(g,x+stats.getWidth()+10,y,200,20,Color.RED, Color.GREEN,0, STANDARD_HP,hp);
+		Renderer.renderProgression(g,x+stats.getWidth()+10,y+20,200,10,Color.YELLOW.darker().darker(), Color.YELLOW,0, STACK_CAP,(int)initiativeStack);
 	}
 }

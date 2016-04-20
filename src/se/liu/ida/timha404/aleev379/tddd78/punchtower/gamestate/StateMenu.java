@@ -17,7 +17,7 @@ public class StateMenu extends Gamestate {
 	/**
 	 * Names of all the playable characters. This doesn't need to be created more than once since it's always the same.
 	 */
-	public static final String[] names = {"Spastic Stan","Brutal Brick","Tanking Ted"};
+	public static final String[] names = {"Speedy Stan","Brutal Brick","Tanky Ted"};
 
 	@Override
 	public void init() {

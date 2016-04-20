@@ -29,19 +29,21 @@ public class StateTower extends Gamestate{
 	private double normalDropChance = 1.0;
 	private double rareDropChance = 0.2;
 	private double epicDropChance = 0.1;
-	private double legendaryDropChance = 0.05;
+	private double legendaryDropChance = 0.02;
 
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
 	//private int attackType = 0;
-    //public StateTower() {
-//	}
+
+    public StateTower(int playerIndex) {
+		player = new Player(playerIndex, STD_INI, STD_ATK, STD_DEF);
+	}
+
 	public void init() {
 		floor = 1;
 		item = Item.generateRandomItem(this);
-		player = new Player("TOP KEK", STD_INI, STD_ATK, STD_DEF);
 		monster = Monster.generateMonster(floor);
 
 
@@ -90,13 +92,6 @@ public class StateTower extends Gamestate{
 				attackEvent(2);
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"),"exit");
-		temp.getActionMap().put("exit", new AbstractAction()
-		{
-			@Override public void actionPerformed(final ActionEvent e) {
-				gameOver();
-			}
-		});
 		}
 
 
@@ -122,17 +117,8 @@ public class StateTower extends Gamestate{
 	}
 
 	public void startOver() {
-		newGame = false;
-		floor = 1;
-		player = new Player(player.getName(), STD_INI, STD_ATK, STD_DEF);
-		monster = Monster.generateMonster(floor);
-		player.setHp(Entity.STANDARD_HP);
-		item = Item.generateRandomItem(this);
-		floorClear = false;
-	}
-
-	public void gameOver() {
-		System.exit(0);
+		removeKeystrokes();
+		GamestateHandler.getInstance().setGamestate(new StateMenu());
 	}
 
 	public double getNormalDropChance() {
@@ -189,21 +175,22 @@ public class StateTower extends Gamestate{
 
 	}
 
-	public void tick()
-	{
-
-	}
-
-	public void attackEvent (int type) {
+	public void attackEvent(int type) {
 		if (floorClear)
 		{
 			return;
 		}
 		if (player.getStats().initiative >= monster.getStats().initiative) {
 			playerAttack(type);
-			monsterAttack();
+			if(player.getInitiativeStack() < Entity.STACK_CAP)
+				monsterAttack();
+			else
+				player.resetInitiativeStack();
 		} else {
-			monsterAttack();
+			if(player.getInitiativeStack() < Entity.STACK_CAP)
+				monsterAttack();
+			else
+				player.resetInitiativeStack();
 			playerAttack(type);
 		}
 	}
@@ -211,9 +198,9 @@ public class StateTower extends Gamestate{
 	public AttackData playerAttack(int type) {
 		AttackData playerData = player.attack(type);
 		if (playerData.kill) {
-
 			floorClear = true;
 		}
+		player.incInitiativeStack();
 		return playerData;
 	}
 
@@ -221,7 +208,6 @@ public class StateTower extends Gamestate{
 		AttackData monsterData = monster.attack(0);
 		if (monsterData.kill) {
 			newGame = true;
-
 		}
 		return monsterData;
 	}
@@ -267,5 +253,20 @@ public class StateTower extends Gamestate{
 			Renderer.renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, 180, true);
 		}
     }
+
+	private void removeKeystrokes()
+	{
+		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("E"));
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("ENTER"));
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("3"));
+		panel.getActionMap().remove("equipItem");
+		panel.getActionMap().remove("skipEquip");
+		panel.getActionMap().remove("quickAttack");
+		panel.getActionMap().remove("normalAttack");
+		panel.getActionMap().remove("heavyAttack");
+	}
 
 }
