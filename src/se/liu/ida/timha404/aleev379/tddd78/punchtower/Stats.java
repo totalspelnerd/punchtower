@@ -61,10 +61,6 @@ public class Stats
 	 * This canvas is needed to calculate the widths of the strings in a certain font.
 	 */
 	private static final Canvas fontCanvas = new Canvas();
-	/**
-	 * This is the default font to draw the stats to the screen
-	 */
-	public static final Font defaultFont = new Font(Font.MONOSPACED, Font.PLAIN, 20);
 
 	public Stats(String header, int initiative, int defense, int attack)
 	{
@@ -108,7 +104,7 @@ public class Stats
 
 	public void updateSize() {
 		// Get a FontMetrics from the canvas from the defaultFont (Used to calculate the size of the strings in the font)
-		FontMetrics fm = fontCanvas.getFontMetrics(defaultFont);
+		FontMetrics fm = fontCanvas.getFontMetrics(FontLoader.mono20);
 
 		// Calculate the width of the panel with the given text to be rendered.
 		width = fm.stringWidth(header);
@@ -141,7 +137,7 @@ public class Stats
 		g.fillRect(x+BORDER_SIZE, y+BORDER_SIZE, width-BORDER_SIZE * 2, height-BORDER_SIZE*2);
 
 		// Set default font to stats.
-		g.setFont(defaultFont);
+		g.setFont(FontLoader.mono20);
 
 		// Draw header of stats as strings.
 		g.setColor(Color.WHITE);

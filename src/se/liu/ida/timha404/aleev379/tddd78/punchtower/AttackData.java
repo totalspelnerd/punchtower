@@ -22,4 +22,16 @@ public class AttackData {
 		this.kill = kill;
 		this.damage = damage;
 	}
+	
+	public String toString()
+	{
+		if(!hit)
+			return "Miss";
+		String s = Integer.toString(damage);
+		if(kill)
+			s+= " Fatal";
+		if(crit)
+			s += " Crit";
+		return s;
+	}
 }

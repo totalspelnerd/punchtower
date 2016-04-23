@@ -33,10 +33,11 @@ public final class ImageLoader{
 	private ImageLoader(){}
 
 	static {
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		try {
 			monster = ImageIO.read(new File("res/ogre.png"));
 			player = ImageIO.read(new File("res/player.png"));
-			background = ImageIO.read(new File("res/stone-wall-texture-wallpaper-2.jpg"));
+			background = ImageIO.read(new File("res/background.jpg"));
 			deadText = ImageIO.read(new File("res/dead.png"));
 		} catch (IOException e) {
 			e.printStackTrace();

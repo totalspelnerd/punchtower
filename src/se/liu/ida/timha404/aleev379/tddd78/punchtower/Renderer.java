@@ -13,8 +13,16 @@ public final class Renderer
 
 	private Renderer() {}
 
+	public static void renderNumberDrop(Graphics g, float timeElapsed, int x, int y, float vx, float vy, float gravity,String text, Color color)
+	{
+		float xPos = x + vx*timeElapsed;
+		float yPos = y + vy*timeElapsed + gravity*timeElapsed*timeElapsed/2.0f;
+		g.setColor(color);
+		renderTextShadow(g, text, (int)xPos, (int)yPos, true);
+	}
+	
 	public static void renderTextShadow(Graphics g, String text, int x, int y, boolean center) {
-			renderTextShadow(g,text,x,y,center,false);
+		renderTextShadow(g,text,x,y,center,false);
 	}
 
 	public static void renderTextShadow(Graphics g, String text, int x, int y, boolean center, boolean background) {

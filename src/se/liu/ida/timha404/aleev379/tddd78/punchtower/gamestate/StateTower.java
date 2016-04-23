@@ -1,7 +1,18 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Entity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
@@ -10,11 +21,6 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.Player;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 
 /**
  * Gamestate of our game. Here is where our game updates and renders. The main game logic is here.
@@ -35,6 +41,10 @@ public class StateTower extends Gamestate{
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
+	
+	List<AttackData> attackData = new ArrayList<AttackData>();
+	List<Float> attackTimer = new ArrayList<Float>();
+	
 	//private int attackType = 0;
 
     public StateTower(int playerIndex) {
@@ -109,7 +119,7 @@ public class StateTower extends Gamestate{
 			player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
 		*/
 		newGame = false;
-		this.floor++;
+		floor++;
 		monster = Monster.generateMonster(floor);
 		player.setHp(Entity.STANDARD_HP);
 		item = Item.generateRandomItem(this);
@@ -172,11 +182,21 @@ public class StateTower extends Gamestate{
     @Override
     public void update(final float timeElapsed)
     {
-
+    	for(int i = 0; i<attackData.size();i++)
+    	{
+    		float f = attackTimer.get(i).floatValue() - timeElapsed;
+    		attackTimer.set(i, f);
+    		if(f <=0)
+    		{
+    			attackData.remove(i);
+    			attackTimer.remove(i);
+    			i--;
+    		}
+    	}
 	}
 
 	public void attackEvent(int type) {
-		if (floorClear)
+		if (floorClear || newGame)
 		{
 			return;
 		}
@@ -197,6 +217,9 @@ public class StateTower extends Gamestate{
 
 	public AttackData playerAttack(int type) {
 		AttackData playerData = player.attack(type);
+		attackData.add(playerData);
+		attackTimer.add(2.0f);
+		assert(attackData.size()==attackTimer.size());
 		if (playerData.kill) {
 			floorClear = true;
 		}
@@ -206,6 +229,9 @@ public class StateTower extends Gamestate{
 
 	public AttackData monsterAttack() {
 		AttackData monsterData = monster.attack(0);
+		attackData.add(monsterData);
+		attackTimer.add(2.0f);
+		assert(attackData.size()==attackTimer.size());
 		if (monsterData.kill) {
 			newGame = true;
 		}
@@ -219,20 +245,33 @@ public class StateTower extends Gamestate{
 		g.drawImage(ImageLoader.background, 0, 0, 1280, 720, null);
 		player.render(g,10,40);
 
-		if(floorClear) {
+		renderFloor(g);
+				
+		renderAttackData(g);
+		
+		renderNewGame(g);
+    }
+    
+    public void renderFloor(Graphics g)
+    {
 
-			item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
-			Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
-			g.setFont(Stats.defaultFont);
-			if (playerItem != null) {
-				playerItem.render(g, PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2);
-				Renderer.renderTextShadow(g, "OLD", PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2 - 5, false);
-			}
+		if(floorClear) {
+			// RENDER ITEM
+			g.setColor(Color.WHITE);
+			g.setFont(FontLoader.mono20);
 			Renderer.renderTextShadow(g, "NEW", PunchPanel.WIDTH / 2 + 10, PunchPanel.HEIGHT / 2 - item.getStats().getHeight() / 2 - 5, false);
+			item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
+			
+			Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
+			if (playerItem != null) {
+				// RENDER PLAYER ITEM STATS
+				g.setColor(Color.WHITE);
+				Renderer.renderTextShadow(g, "OLD", PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2 - 5, false);
+				playerItem.render(g, PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2);
+			}
+			// RENDER TEXT TO SCREEN
 			Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true);
 			Renderer.renderTextShadow(g, "Press ENTER to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
-
-
 		} else {
 			monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, 40);
 			g.setColor(Color.WHITE);
@@ -240,17 +279,40 @@ public class StateTower extends Gamestate{
 			Renderer.renderTextShadow(g, "2: normal attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2, true);
 			Renderer.renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2+25, true);
 		}
-		if (newGame) {
-			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
-			Renderer.renderTextShadow(g, "Press ENTER to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
-		}
-
-		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,80));
+		
+		g.setFont(FontLoader.mono72);
 		g.setColor(Color.WHITE);
 		Renderer.renderTextShadow(g, "Floor:"+floor, PunchPanel.WIDTH/2, 100, true);
 		if (floor < 13) {
-			g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,40));
+			g.setFont(FontLoader.mono40);
 			Renderer.renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, 180, true);
+		}
+    }
+    
+    public void renderAttackData(Graphics g)
+    {
+		g.setFont(FontLoader.sans72);
+		for(int i = 0;i<attackData.size();i++)
+		{
+			AttackData data = attackData.get(i);
+			if(data.attacker instanceof Player)
+			{
+				Renderer.renderNumberDrop(g, 2.0f-attackTimer.get(i), PunchPanel.WIDTH-300, 300, 100, -100, 300, data.toString(), Color.RED);
+			}
+			else
+			{
+				Renderer.renderNumberDrop(g, 2.0f-attackTimer.get(i), 200, 300, 100, -100, 300, data.toString(), Color.RED);
+			}
+		}
+    }
+    
+    public void renderNewGame(Graphics g)
+    {
+    	g.setFont(FontLoader.mono40);
+		if (newGame) {
+			g.setColor(Color.WHITE);
+			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
+			Renderer.renderTextShadow(g, "Press ENTER to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
 		}
     }
 
