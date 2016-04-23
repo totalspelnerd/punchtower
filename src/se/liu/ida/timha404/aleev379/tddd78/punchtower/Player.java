@@ -21,14 +21,18 @@ public class Player extends Entity{
 
 	private int playerIndex;
 
-
-
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
+	private int lastLevel;
+	private int level;
+	private int xp;
 
 
 	public Player(int playerIndex, final int initiative, final int attack, final int defense) {
 		super(new Stats(StateMenu.names[playerIndex], initiative, attack, defense), STANDARD_HP, StateMenu.names[playerIndex]);
 		this.playerIndex = playerIndex;
+		lastLevel = 1;
+		level = 1;
+		xp = 0;
 		for (int i = 0; i < equipped.length; i++) {
 			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i);
 		}
@@ -84,6 +88,41 @@ public class Player extends Entity{
 		}
 		return Combat.attack(this, monster, attackType);
 	}
+	
+	public void spec(int stat)
+	{
+		switch (stat) {
+		case 0:
+			stats.initiative += 10*Math.pow(2, lastLevel/7.0);
+			break;
+		case 1:
+			stats.attack += 10*Math.pow(2, lastLevel/7.0);
+			break;
+		case 2:
+			stats.defense += 10*Math.pow(2, lastLevel/7.0);
+			break;
+		}
+		lastLevel++;
+	}
+	
+	public boolean didLevelUp()
+	{
+		// level should never be less than the last level
+		assert(level >= lastLevel);
+		return level!=lastLevel;
+	}
+	
+	public void addXp()
+	{
+		// We should only add xp if we are currently not leveling up.
+		assert(lastLevel == level) : "lastLevel can't be different from level: " + lastLevel + " "+level;
+		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
+		xp += monster.stats.getTotal();
+		while(xp > Experience.getXp(level+1))
+		{
+			level++;
+		}
+	}
 
 
 	public void render(Graphics g, int x, int y)
@@ -92,5 +131,9 @@ public class Player extends Entity{
 		g.drawImage(ImageLoader.player,x+100,y+200,200,400,null);
 		Renderer.renderProgression(g,x+stats.getWidth()+10,y,200,20,Color.RED, Color.GREEN,0, STANDARD_HP,hp);
 		Renderer.renderProgression(g,x+stats.getWidth()+10,y+20,200,10,Color.YELLOW.darker().darker(), Color.YELLOW,0, STACK_CAP,(int)initiativeStack);
+		g.setFont(FontLoader.mono20);
+		g.setColor(Color.CYAN);
+		Renderer.renderTextShadow(g, "lvl: "+level, x+stats.getWidth()+10, y+45, false);
+		Renderer.renderProgression(g, x+stats.getWidth()+10, y+50, 200, 10, Color.BLUE.darker().darker(), Color.BLUE, Experience.getXp(level), Experience.getXp(level+1), xp);
 	}
 }

@@ -41,7 +41,7 @@ public class StateTower extends Gamestate{
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
-	
+		
 	List<AttackData> attackData = new ArrayList<AttackData>();
 	List<Float> attackTimer = new ArrayList<Float>();
 	
@@ -62,9 +62,12 @@ public class StateTower extends Gamestate{
 		temp.getActionMap().put("equipItem", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				if (floorClear) {
-					player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
-					nextFloor();
+				if(!player.didLevelUp())
+				{
+					if (floorClear) {
+						player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
+						nextFloor();
+					}
 				}
 			}
 		});
@@ -72,11 +75,14 @@ public class StateTower extends Gamestate{
 		temp.getActionMap().put("skipEquip", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				if (newGame) {
-					startOver();
-				}
-				if (floorClear) {
-					nextFloor();
+				if(!player.didLevelUp())
+				{
+					if (newGame) {
+						startOver();
+					}
+					if (floorClear) {
+						nextFloor();
+					}
 				}
 			}
 		});
@@ -85,21 +91,51 @@ public class StateTower extends Gamestate{
 		temp.getActionMap().put("quickAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				attackEvent(0);
+				if(!player.didLevelUp())
+					attackEvent(0);
 			}
 		});
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),"normalAttack");
 		temp.getActionMap().put("normalAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				attackEvent(1);
+				if(!player.didLevelUp())
+					attackEvent(1);
 			}
 		});
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),"heavyAttack");
 		temp.getActionMap().put("heavyAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
-				attackEvent(2);
+				if(!player.didLevelUp())
+					attackEvent(2);
+			}
+		});
+		
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"),"specIni");
+		temp.getActionMap().put("specIni", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				if(player.didLevelUp())
+					player.spec(0);
+			}
+		});
+		
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"),"specAtk");
+		temp.getActionMap().put("specAtk", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				if(player.didLevelUp())
+					player.spec(1);
+			}
+		});
+		
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("6"),"specDef");
+		temp.getActionMap().put("specDef", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				if(player.didLevelUp())
+					player.spec(2);
 			}
 		});
 		}
@@ -221,6 +257,7 @@ public class StateTower extends Gamestate{
 		attackTimer.add(2.0f);
 		assert(attackData.size()==attackTimer.size());
 		if (playerData.kill) {
+			player.addXp();
 			floorClear = true;
 		}
 		player.incInitiativeStack();
@@ -256,22 +293,37 @@ public class StateTower extends Gamestate{
     {
 
 		if(floorClear) {
-			// RENDER ITEM
-			g.setColor(Color.WHITE);
-			g.setFont(FontLoader.mono20);
-			Renderer.renderTextShadow(g, "NEW", PunchPanel.WIDTH / 2 + 10, PunchPanel.HEIGHT / 2 - item.getStats().getHeight() / 2 - 5, false);
-			item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
-			
-			Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
-			if (playerItem != null) {
-				// RENDER PLAYER ITEM STATS
+			if(!player.didLevelUp())
+			{
+				// RENDER ITEM
 				g.setColor(Color.WHITE);
-				Renderer.renderTextShadow(g, "OLD", PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2 - 5, false);
-				playerItem.render(g, PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2);
+				g.setFont(FontLoader.mono20);
+				Renderer.renderTextShadow(g, "NEW", PunchPanel.WIDTH / 2 + 10, PunchPanel.HEIGHT / 2 - item.getStats().getHeight() / 2 - 5, false);
+				item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
+				
+				Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
+				if (playerItem != null) {
+					// RENDER PLAYER ITEM STATS
+					g.setColor(Color.WHITE);
+					Renderer.renderTextShadow(g, "OLD", PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2 - 5, false);
+					playerItem.render(g, PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2);
+				}
+				// RENDER TEXT TO SCREEN
+				Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true);
+				Renderer.renderTextShadow(g, "Press ENTER to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
 			}
-			// RENDER TEXT TO SCREEN
-			Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true);
-			Renderer.renderTextShadow(g, "Press ENTER to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
+			else
+			{
+				g.setColor(Color.WHITE);
+				g.setFont(FontLoader.mono72);
+				Renderer.renderTextShadow(g, "Level Up!", PunchPanel.WIDTH/2, 400, true);
+				g.setFont(FontLoader.mono20);
+				// RENDER SPEC TO SCREEN
+				Renderer.renderTextShadow(g, "Press 4 to spec in INITIATIVE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true,true);
+				Renderer.renderTextShadow(g, "Press 5 to spec in ATTACK",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 70, true,true);
+				Renderer.renderTextShadow(g, "Press 6 to spec in DEFENCE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 110, true,true);
+				
+			}
 		} else {
 			monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, 40);
 			g.setColor(Color.WHITE);
@@ -287,6 +339,11 @@ public class StateTower extends Gamestate{
 			g.setFont(FontLoader.mono40);
 			Renderer.renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, 180, true);
 		}
+    }
+    
+    public void spec(int stat)
+    {
+    	
     }
     
     public void renderAttackData(Graphics g)

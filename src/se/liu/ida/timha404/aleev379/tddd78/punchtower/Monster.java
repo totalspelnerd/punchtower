@@ -44,13 +44,13 @@ public class Monster extends Entity{
 	 */
 
 	public static Monster generateMonster(int floor) {
-		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
+		//Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 		String type = MonsterType.randomMonsterType();
 		int ini = 0;
 		int atk = 0;
 		int def = 0;
-		double exponent = 1.3;
-		double monsterMod = 5;
+		//double exponent = 1.3;
+		//double monsterMod = 5;
 		double base = 1.023151432;
 		double start = 1077.587445;
 		double statBase = start * Math.pow(base, floor);
