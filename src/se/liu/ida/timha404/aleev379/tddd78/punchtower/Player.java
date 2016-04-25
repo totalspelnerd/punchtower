@@ -38,6 +38,10 @@ public class Player extends Entity{
 		}
 	}
 
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
 	public Item getItem(final int itemIndex) {
 		return equipped[itemIndex];
 	}
@@ -58,21 +62,20 @@ public class Player extends Entity{
 		stats.increase(equipped[itemIndex].getStats());
 		switch (playerIndex) {
 			case 0:
-				System.out.println(temp.initiative+" : " + stats.initiative);
 				if (temp.initiative < stats.initiative) {
-					stats.initiative += (int) Math.max(30, temp.initiative*0.1f);
+					stats.initiative += (int) Math.min(30, temp.initiative*0.1f);
 				}
 				break;
 			case 1:
 				if (temp.attack < stats.attack) {
-					stats.defense -= (25);
-					stats.attack += (int) Math.max(20, temp.attack*0.05f);
+					//stats.defense -= (25);
+					stats.attack += (int) Math.min(30, temp.attack*0.05f);
 				}
 				break;
 			case 2:
 				if (temp.defense < stats.defense) {
-					stats.attack -= (25);
-					stats.defense += (int) Math.max(50, temp.defense*0.07f);
+					//stats.attack -= (25);
+					stats.defense += (int) Math.min(50, temp.defense*0.1f);
 				}
 				break;
 		}

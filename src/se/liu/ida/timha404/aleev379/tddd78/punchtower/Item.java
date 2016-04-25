@@ -65,6 +65,11 @@ public class Item{
 		int ini = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
 		int def = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
 		int atk = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
+		if (StateTower.floor >15 || StateTower.floor < 80) {
+			ini *= 0.85;
+			atk *= 0.85;
+			def *= 0.85;
+		}
 		if (thisRarity == Rarity.LEGENDARY && rnd.nextDouble() >= 0.5) {
 			int temping = rnd.nextInt(3);
 			switch(temping) {

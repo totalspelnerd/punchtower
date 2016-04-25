@@ -72,5 +72,4 @@ public abstract class Entity{
 	public abstract AttackData attack(int attackType);
 	public abstract void render(Graphics g, int x, int y);
 
-
 }

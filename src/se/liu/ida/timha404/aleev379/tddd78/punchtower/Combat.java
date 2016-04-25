@@ -65,7 +65,11 @@ public class Combat {
 
 		int damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
 		if (attacker instanceof Player && StateTower.floor < 13) {
-			damage *= 4;
+			int damageMult =(int)  ((15 - StateTower.floor)*0.25 + 1);
+			if (attacker.getName() != "Speedy Stan") {
+				damageMult += 0.5;
+			}
+			damage *= damageMult;
 		}
 		if (crit) {
 			damage *= (int) (RANDOM.nextDouble()*0.5+1.7); // These magic numbers are used to set the critical hit modifier.

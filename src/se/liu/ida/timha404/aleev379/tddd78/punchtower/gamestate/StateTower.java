@@ -71,7 +71,7 @@ public class StateTower extends Gamestate{
 				}
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"),"skipEquip");
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"),"skipEquip");
 		temp.getActionMap().put("skipEquip", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
@@ -112,7 +112,7 @@ public class StateTower extends Gamestate{
 			}
 		});
 		
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("4"),"specIni");
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"),"specIni");
 		temp.getActionMap().put("specIni", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
@@ -121,7 +121,7 @@ public class StateTower extends Gamestate{
 			}
 		});
 		
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("5"),"specAtk");
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F2"),"specAtk");
 		temp.getActionMap().put("specAtk", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
@@ -130,7 +130,7 @@ public class StateTower extends Gamestate{
 			}
 		});
 		
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("6"),"specDef");
+		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F3"),"specDef");
 		temp.getActionMap().put("specDef", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
@@ -319,9 +319,9 @@ public class StateTower extends Gamestate{
 				Renderer.renderTextShadow(g, "Level Up!", PunchPanel.WIDTH/2, 400, true);
 				g.setFont(FontLoader.mono20);
 				// RENDER SPEC TO SCREEN
-				Renderer.renderTextShadow(g, "Press 4 to spec in INITIATIVE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true,true);
-				Renderer.renderTextShadow(g, "Press 5 to spec in ATTACK",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 70, true,true);
-				Renderer.renderTextShadow(g, "Press 6 to spec in DEFENCE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 110, true,true);
+				Renderer.renderTextShadow(g, "Press F1 to spec in INITIATIVE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true,true);
+				Renderer.renderTextShadow(g, "Press F2 to spec in ATTACK",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 70, true,true);
+				Renderer.renderTextShadow(g, "Press F3 to spec in DEFENCE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 110, true,true);
 				
 			}
 		} else {
