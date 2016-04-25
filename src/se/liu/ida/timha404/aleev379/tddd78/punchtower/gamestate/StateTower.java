@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -37,6 +38,7 @@ public class StateTower extends Gamestate{
 	private double epicDropChance = 0.1;
 	private double legendaryDropChance = 0.02;
 
+	private Random rnd = new Random();
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
@@ -278,8 +280,17 @@ public class StateTower extends Gamestate{
 
     @Override
     public void render(final Graphics g)
-    {
-		g.drawImage(ImageLoader.background, 0, 0, 1280, 720, null);
+	{
+		if(floor == 66 || floor == 666) {
+			g.drawImage(ImageLoader.background4, 0, 0, 1280, 720, null);
+
+		}else if (floor>50) {
+			g.drawImage(ImageLoader.background3, 0, 0, 1280, 720, null);
+
+		}else{
+			//(ImageLoader.background1, ImageLoader.background2);
+			g.drawImage(ImageLoader.background1, 0, 0, 1280, 720, null);
+		}
 		player.render(g,10,40);
 
 		renderFloor(g);
@@ -310,7 +321,7 @@ public class StateTower extends Gamestate{
 				}
 				// RENDER TEXT TO SCREEN
 				Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true);
-				Renderer.renderTextShadow(g, "Press ENTER to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
+				Renderer.renderTextShadow(g, "Press SPACE to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
 			}
 			else
 			{
@@ -369,7 +380,7 @@ public class StateTower extends Gamestate{
 		if (newGame) {
 			g.setColor(Color.WHITE);
 			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
-			Renderer.renderTextShadow(g, "Press ENTER to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
+			Renderer.renderTextShadow(g, "Press SPACE to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
 		}
     }
 
@@ -377,7 +388,7 @@ public class StateTower extends Gamestate{
 	{
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("E"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("ENTER"));
+		panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("3"));

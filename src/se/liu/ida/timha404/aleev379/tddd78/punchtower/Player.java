@@ -11,14 +11,14 @@ import java.awt.*;
  */
 
 public class Player extends Entity{
-
+/*
 	public static final int ITEM_HEAD= 0;
 	public static final int ITEM_SHOULDER= 1;
 	public static final int ITEM_CHEST= 2;
 	public static final int ITEM_LEGS= 3;
 	public static final int ITEM_BOOTS= 4;
 	public static final int ITEM_WEAPON= 5;
-
+*/
 	private int playerIndex;
 
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
@@ -34,12 +34,8 @@ public class Player extends Entity{
 		level = 1;
 		xp = 0;
 		for (int i = 0; i < equipped.length; i++) {
-			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i);
+			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i); // Magic numbers for starter item stats
 		}
-	}
-
-	public int getPlayerIndex() {
-		return playerIndex;
 	}
 
 	public Item getItem(final int itemIndex) {
@@ -48,8 +44,8 @@ public class Player extends Entity{
 
 	/**
 	 * Equips the player with the given item and adjusts player stats accordingly.
-	 * @param item
-	 * @param itemIndex
+	 * @param item The item to be equipped
+	 * @param itemIndex An index representing the item slot to be used
 	 */
 
 	public void equip(final Item item, final int itemIndex) {
@@ -60,7 +56,7 @@ public class Player extends Entity{
 		}
 		this.equipped[itemIndex] = item;
 		stats.increase(equipped[itemIndex].getStats());
-		switch (playerIndex) {
+		switch (playerIndex) { // Magic numbers to adjust the balance of the game
 			case 0:
 				if (temp.initiative < stats.initiative) {
 					stats.initiative += (int) Math.min(30, temp.initiative*0.1f);
@@ -94,15 +90,15 @@ public class Player extends Entity{
 	
 	public void spec(int stat)
 	{
-		switch (stat) {
+		switch (stat) { // Magic numbers to maintain balance
 		case 0:
-			stats.initiative += 10*Math.pow(2, lastLevel/7.0);
+			stats.initiative += (int) (10*Math.pow(2, lastLevel/8.0));
 			break;
 		case 1:
-			stats.attack += 10*Math.pow(2, lastLevel/7.0);
+			stats.attack += (int) (10*Math.pow(2, lastLevel/8.0));
 			break;
 		case 2:
-			stats.defense += 10*Math.pow(2, lastLevel/7.0);
+			stats.defense += (int) (10*Math.pow(2, lastLevel/8.0));
 			break;
 		}
 		lastLevel++;

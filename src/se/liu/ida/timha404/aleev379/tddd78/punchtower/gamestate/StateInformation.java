@@ -52,7 +52,7 @@ public class StateInformation extends Gamestate
 	@Override
 	public void render(final Graphics g)
 	{
-		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
+		g.drawImage(ImageLoader.background1, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		String text = "";
 		switch(state)
 		{

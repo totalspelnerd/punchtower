@@ -102,6 +102,10 @@ public class Stats
 		return height;
 	}
 
+
+	/**
+	 * Updates the size of the rendered stat panel to fit new stat numbers
+	 */
 	public void updateSize() {
 		// Get a FontMetrics from the canvas from the defaultFont (Used to calculate the size of the strings in the font)
 		FontMetrics fm = fontCanvas.getFontMetrics(FontLoader.mono20);

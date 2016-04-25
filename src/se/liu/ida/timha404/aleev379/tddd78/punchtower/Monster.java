@@ -28,6 +28,11 @@ public class Monster extends Entity{
 
 	}
 
+	/**
+	 * Generates a new AttackData with information about an attack made by a monster
+	 * @param attackType represents the kind of attack used (not used for monsters atm)
+	 * @return A new AttackData object with the details of the attack event
+	 */
 	public AttackData attack(int attackType) {
 		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 
@@ -44,18 +49,18 @@ public class Monster extends Entity{
 	 */
 
 	public static Monster generateMonster(int floor) {
-		//Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 		String type = MonsterType.randomMonsterType();
-		int ini = 0;
-		int atk = 0;
-		int def = 0;
-		//double exponent = 1.3;
-		//double monsterMod = 5;
+		int ini;
+		int atk;
+		int def;
+		// Magic numbers used in calculating stats for a monster to keep the game balanced
 		double base = 1.023151432;
 		double start = 1077.587445;
 		double statBase = start * Math.pow(base, floor);
-		double lowFloorMod = Math.min(14/floor, 400) + 100;
-		if (floor < 13) {
+		double lowFloorMod = Math.min(14/floor, 400) + 150; // Explicit numbers to make the first few floor easier.
+		if (floor < 13) { // explicit number to decide which floors are easier
+
+			// Magic numbers to make the stats vary within the range 0.9 - 1.2 times the calculated stat
 			ini = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;
 			def = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;
 			atk = (int) ((statBase * 0.9 + statBase * rnd.nextDouble() * 0.3)-lowFloorMod)/3;

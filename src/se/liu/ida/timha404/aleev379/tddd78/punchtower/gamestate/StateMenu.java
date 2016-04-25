@@ -56,7 +56,7 @@ public class StateMenu extends Gamestate {
 
 	@Override
 	public void render(final Graphics g) {
-		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
+		g.drawImage(ImageLoader.background1, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 
 		String description = "HELLO AND WELCOME ADVENTURER!\nDo you wish to wander up a tower and get some epic loot? If yes, then this is the game for you!\nIf no, you might as well just turn of the game.\nTo begin with I need to know who you are.\n\nChoose a character below with 1-3 on your keyboard. You do have a keyboard, right?";
 		String iniGuy = "I'm the fastest man ALIVE! I'm like a snake ready to attack.";

@@ -11,9 +11,12 @@ import java.io.IOException;
 public final class ImageLoader{
 
 	/**
-	 * Background image of our game. No need to load more than one
+	 * Background images of our game. No need to load more than once
 	 */
-	public static Image background = null;
+	public static Image background1 = null;
+	public static Image background2 = null;
+	public static Image background3 = null;
+	public static Image background4 = null;
 
 	/**
 	 * The image of the text when you die. No need to load more than one
@@ -37,7 +40,10 @@ public final class ImageLoader{
 		try {
 			monster = ImageIO.read(new File("res/ogre.png"));
 			player = ImageIO.read(new File("res/player.png"));
-			background = ImageIO.read(new File("res/background.jpg"));
+			background1 = ImageIO.read(new File("res/background1.jpg"));
+			background2 = ImageIO.read(new File("res/background2.jpg"));
+			background3 = ImageIO.read(new File("res/background3.png"));
+			background4 = ImageIO.read(new File("res/background4.jpg"));
 			deadText = ImageIO.read(new File("res/dead.png"));
 		} catch (IOException e) {
 			e.printStackTrace();

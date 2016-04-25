@@ -56,7 +56,7 @@ public class Item{
 		} else if (drop <= curTower.getRareDropChance()) {
 			thisRarity = Rarity.RARE;
 			rarityMod = 1.5;
-		} else { //if (drop <= curTower.getNormalDropChance()) {
+		} else {
 			thisRarity = Rarity.NORMAL;
 			rarityMod = 1;
 		}
@@ -89,6 +89,13 @@ public class Item{
 
 		return thisItem;
 	}
+
+	/**
+	 * This methid renders an items stats to the screen by calling Stats.render()
+	 * @param g provides the Stats.render() method with its required Graphic
+	 * @param x is the x-coordinate for the renderer
+	 * @param y is the y-coordinate for the renderer
+	 */
 
 	public void render(Graphics g, int x, int y)
 	{
