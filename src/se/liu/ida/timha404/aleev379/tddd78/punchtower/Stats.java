@@ -60,7 +60,7 @@ public class Stats
 	/**
 	 * This canvas is needed to calculate the widths of the strings in a certain font.
 	 */
-	private static final Canvas fontCanvas = new Canvas();
+	private static final Canvas FONT_CANVAS = new Canvas();
 
 	public Stats(String header, int initiative, int defense, int attack)
 	{
@@ -108,7 +108,7 @@ public class Stats
 	 */
 	public void updateSize() {
 		// Get a FontMetrics from the canvas from the defaultFont (Used to calculate the size of the strings in the font)
-		FontMetrics fm = fontCanvas.getFontMetrics(FontLoader.mono20);
+		FontMetrics fm = FONT_CANVAS.getFontMetrics(FontLoader.mono20);
 
 		// Calculate the width of the panel with the given text to be rendered.
 		width = fm.stringWidth(header);
@@ -146,7 +146,8 @@ public class Stats
 		// Draw header of stats as strings.
 		g.setColor(Color.WHITE);
 		g.drawString(header, x + BORDER_SIZE+TEXT_OFFSET, y + STARTY);
-		g.fillRect(x+BORDER_SIZE+TEXT_OFFSET,y+STARTY+1,width-12,2); // Underline
+
+		g.fillRect(x+BORDER_SIZE+TEXT_OFFSET,y+STARTY+1,width-BORDER_SIZE*2-TEXT_OFFSET*2,2); // Underline
 
 		// Draw stats as strings.
 		g.drawString("INI " + initiative, x + BORDER_SIZE+TEXT_OFFSET, y + STARTY + ROW_HEIGHT);
@@ -161,8 +162,8 @@ public class Stats
 	}
 	
 
-	public Stats clone()
+	public static Stats clone(Stats stat)
 	{
-		return new Stats(header,initiative,attack,defense);
+		return new Stats(stat.header,stat.initiative,stat.attack,stat.defense);
 	}
 }

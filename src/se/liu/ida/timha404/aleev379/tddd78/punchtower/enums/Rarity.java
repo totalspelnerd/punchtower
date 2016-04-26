@@ -1,4 +1,4 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.enums;
 
 /**
  * This is an enum to represent the different rarities of items available in the game.

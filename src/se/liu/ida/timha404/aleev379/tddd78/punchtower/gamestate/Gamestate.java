@@ -25,7 +25,7 @@ public abstract class Gamestate
     /**
      * Tick of the game. Called once every second.
      */
-    public void tick() {} // Doesn't need to be implemented for every state.
+    public void tick() {} // Doesn't need to be implemented for every state. But can be used if needed
 
     /**
      * Rneders the game.

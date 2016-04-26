@@ -16,7 +16,7 @@ public final class Renderer
 	public static void renderNumberDrop(Graphics g, float timeElapsed, int x, int y, float vx, float vy, float gravity,String text, Color color)
 	{
 		float xPos = x + vx*timeElapsed;
-		float yPos = y + vy*timeElapsed + gravity*timeElapsed*timeElapsed/2.0f;
+		float yPos = y + vy*timeElapsed + gravity*timeElapsed*timeElapsed/2.0f; // Formula for movement in y direction with speed and gravity.
 		g.setColor(color);
 		renderTextShadow(g, text, (int)xPos, (int)yPos, true);
 	}
@@ -32,7 +32,7 @@ public final class Renderer
 		}
 		if(background)
 		{
-			g.setColor(new Color(0,0,0,125));
+			g.setColor(new Color(0,0,0,125)); // Alpha color of 125
 			g.fillRect(x-5,y-g.getFont().getSize(),g.getFontMetrics().stringWidth(text)+10,g.getFont().getSize()+10);
 		}
 		g.setColor(c.darker().darker().darker().darker());
@@ -56,13 +56,12 @@ public final class Renderer
 		for (String line : lines) 	{
 			String[] words = line.split(" ");
 			for (String word : words) {
-				if (lineLength == 0 || (lineLength + g.getFontMetrics().stringWidth(word)) < width) {
-
-				} else {
+				if (lineLength != 0 && (lineLength + g.getFontMetrics().stringWidth(word)) >= width) {
 					if(longestLine < lineLength)
 						longestLine = lineLength;
 					complete.add(sb.toString());
 					sb.setLength(0);
+
 				}
 				sb.append(word).append(" ");
 				lineLength = g.getFontMetrics().stringWidth(sb.toString());
@@ -77,8 +76,8 @@ public final class Renderer
 		if(background)
 		{
 			Color c = g.getColor();
-			g.setColor(new Color(0,0,0,125));
-			g.fillRect(x-5,y,longestLine+10,(int)(complete.size() * g.getFont().getSize() * 5.0 / 4.0)+10);
+			g.setColor(new Color(0,0,0,125)); // Alpha color of 125
+			g.fillRect(x-5,y,longestLine+10,(int)(complete.size() * g.getFont().getSize() * 5.0 / 4.0)+10);// The division 5.0/4.0 is to get a margin between lines of text
 			g.setColor(c);
 		}
 		for (int i = 0; i < complete.size(); i++) {

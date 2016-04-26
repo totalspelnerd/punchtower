@@ -1,7 +1,15 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
-public class Experience {
-	
+
+/**
+ * This class handles our experience math to calculate the amount of experience needed for a certain level.<br/>
+ * Everything in this class is static since we would not need an object to generate the experience.
+ * You can't change its ourcome by altering some variables.
+ */
+public final class Experience {
+
+	private Experience(){}
+
 	public static int getXp(int level)
 	{
 		if(level <= 1)
@@ -14,8 +22,8 @@ public class Experience {
 		return xpLast;
 	}
 	
-	public static int getXpDiff(int level)
+	private static int getXpDiff(int level)
 	{
-		return (int)(1000*Math.pow(2.0f, level/7.0));
+		return (int)(1000*Math.pow(2, level/7.0)); // 7.0 is a magic number to scale the xp into a certain function.
 	}
 }

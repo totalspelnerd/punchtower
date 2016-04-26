@@ -1,9 +1,7 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateInformation;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +11,7 @@ import java.awt.event.ActionEvent;
  * all the calling to the drawing / updates.
  */
 
-public class PunchTower
+public final class PunchTower
 {
 	/**
 	 * Frame cap of the game.
@@ -33,7 +31,7 @@ public class PunchTower
 	/**
 	 * Boolean to keep the gameloop running. <br> If true it will keep running otherwise it will stop.
 	 */
-	private boolean running = true;
+	private volatile boolean running = true;
 
 	/**
 	 * Current frames per second of the game.
@@ -48,16 +46,23 @@ public class PunchTower
 	private PunchFrame frame;// = new PunchFrame();
 
 
+	private int frames = 0;
+
 	/**
 	 * Private since this should never be created anywhere else.<br> We will never have more than one instance of the game
 	 * running on one process (at the same time).
 	 */
 	private PunchTower()
 	{
-
+		frame = new PunchFrame();
+		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
+		frame.getPanel().getActionMap().put("exit", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				closeGameLoop();
+			}
+		});
 	}
-
-	int frames = 0;
 
 	/**
 	 * This method is called to run the gameloop. It is not threaded so it will take up the whole thread and run forever.
@@ -75,15 +80,9 @@ public class PunchTower
 		int updates = 0;
 
 		Timer timer = new Timer();
-		frame = new PunchFrame();
-		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
-		frame.getPanel().getActionMap().put("exit", new AbstractAction()
-		{
-			@Override public void actionPerformed(final ActionEvent e) {
-				System.exit(0);
-			}
-		});
+
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
+
 		while (running) {
 			float deltaTime = timer.timeElapsed();
 			updateDelta += deltaTime;
@@ -108,10 +107,11 @@ public class PunchTower
 				frameDelta -= frameTime;
 			}
 			try {
-				Thread.sleep(1);
+				Thread.sleep(1); // Needed to not "overheat" the CPU. We dont need to render more than 1000fps at any point anyways.
 			} catch (InterruptedException e) {
-				// Doesn't matter if this happens every once in a while.
-				// Since this is more to controll the fps to a more exact time.
+				// Doesn't matter if this happens
+				// Since this is more to controll the fps to a more exact time
+				// and to not overuse the CPU when it is not needed.
 			}
 		}
 	}

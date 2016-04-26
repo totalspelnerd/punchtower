@@ -1,28 +1,34 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.entity;
 
-import java.awt.*;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
 
 /**
  * Entity is something that can fight something else in the game.
  */
-public abstract class Entity{
+public class Entity{
 
 	/**
 	 * The standard hp for normal enemies and players.
 	 */
 	public static final int STANDARD_HP = 2500;
+
+	/**
+	 * Max number that can be added to the initiative stack.
+	 */
 	public static final int MAX_STACK_INC = 100;
+
+	/**
+	 * Initiative stack size.
+	 */
 	public static final int STACK_CAP = 300;
 
 	protected Stats stats;
 	protected int hp;
 	protected float initiativeStack;
-	protected String name;
 
-	protected Entity(final Stats stats, final int hp, final String name) {
+	protected Entity(final Stats stats, final int hp) {
 		this.stats = stats;
 		this.hp = hp;
-		this.name = name;
 		initiativeStack = 0;
 	}
 
@@ -30,29 +36,13 @@ public abstract class Entity{
 		return stats;
 	}
 
-	public void setStats(final Stats stats) {
-		this.stats = stats;
-	}
-
-	public int getHp() {
-		return hp;
-	}
-
 	public void setHp(final int hp) {
 		this.hp = hp;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
-
 	public void incInitiativeStack()
 	{
-		float inc = stats.initiative*0.1f; // 10% of initiative
+		float inc = stats.initiative*0.1f; // 10% of initiative used to add to the stack to potentially do two attacks instead of one.
 		inc = inc > MAX_STACK_INC ? MAX_STACK_INC : inc;
 		initiativeStack += inc;
 		initiativeStack = initiativeStack > STACK_CAP ? STACK_CAP : initiativeStack;
@@ -67,9 +57,5 @@ public abstract class Entity{
 	{
 		return initiativeStack;
 	}
-
-
-	public abstract AttackData attack(AttackType type);
-	public abstract void render(Graphics g, int x, int y);
 
 }

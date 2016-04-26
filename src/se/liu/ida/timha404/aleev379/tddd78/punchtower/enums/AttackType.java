@@ -1,4 +1,4 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.enums;
 
 /**
  * This enum keeps track of all of our attack types, with their respective hit chance, crit chance and damage modifiers.

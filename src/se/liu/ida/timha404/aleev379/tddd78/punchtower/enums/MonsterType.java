@@ -1,10 +1,19 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.enums;
 
 import java.util.Random;
 
+/**
+ * Enum for our monster, could potentially be used in the future.
+ */
 public enum MonsterType{
-
-	OGRE(), TROLL();
+	/**
+	 * Enum used for ogres
+	 */
+	OGRE,
+	/**
+	 * Enum used for ogres
+	 */
+	TROLL;
 
 
 

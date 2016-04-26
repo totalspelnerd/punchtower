@@ -12,24 +12,30 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Entity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Monster;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Player;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Monster;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
 
 /**
  * Gamestate of our game. Here is where our game updates and renders. The main game logic is here.
  */
 public class StateTower extends Gamestate{
 
+
+	/**
+	 * Number of tutorial floors.
+	 */
+	public static final int TUTORIAL_FLOOR = 13;
 	/**
 	 * Standard initiative value for players
 	 */
@@ -48,19 +54,36 @@ public class StateTower extends Gamestate{
 	private Item item = null;
 	private int floor;
 
-	public static final float ATTACKDATA_TIMER = 2.0f;
+	/**
+	 * Timer time for the attackdata to disapear (in seconds)
+	 */
+	public static final float ATTACKDATA_TIMER = 3.0f;
 
-	public static final float NORMAL_DROP_CHANCE= 1.0f;
+	/**
+	 * Rare rarity items drop chance
+	 */
 	public static final float RARE_DROP_CHANCE= 0.2f;
+
+	/**
+	 * Epic rarity items drop chance
+	 */
 	public static final float EPIC_DROP_CHANCE= 0.1f;
+
+	/**
+	 * Legendary rarity items drop chance
+	 */
 	public static final float LEGENDARY_DROP_CHANCE= 0.02f;
+
+	/**
+	 * Random used inside of StateTower
+	 */
+	private Random rnd = new Random();
 
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
-	private static Random RANDOM = new Random();
-		
+
 	private List<AttackData> attackData = new ArrayList<AttackData>();
 	private List<Float> attackTimer = new ArrayList<Float>();
 	
@@ -136,7 +159,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(player.didLevelUp())
-					player.spec(0);
+					player.spec(StatType.INITIATIVE);
 			}
 		});
 		
@@ -145,7 +168,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(player.didLevelUp())
-					player.spec(1);
+					player.spec(StatType.ATTACK);
 			}
 		});
 		
@@ -154,7 +177,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(player.didLevelUp())
-					player.spec(2);
+					player.spec(StatType.DEFENSE);
 			}
 		});
 		}
@@ -199,7 +222,8 @@ public class StateTower extends Gamestate{
     public void update(final float timeElapsed)
     {
 		assert(attackData.size()==attackTimer.size()) : "attackData and attackTimer is not the same size, cannot map them together.";
-    	for(int i = 0; i<attackData.size();i++)
+		int size =attackData.size();
+    	for(int i = 0; i<size;i++)
     	{
     		float f = attackTimer.get(i).floatValue() - timeElapsed;
     		attackTimer.set(i, f);
@@ -207,8 +231,8 @@ public class StateTower extends Gamestate{
     		{
     			attackData.remove(i);
     			attackTimer.remove(i);
-    			i--;
-				// Since we are removing an object in the list we need to decrement i with one to be able to look through all the data and not just one
+    			i--; // Since we are removing an object in the list we need to decrement i with one to be able to look through all the data and not just one
+				size--;
     		}
     	}
 	}
@@ -233,7 +257,7 @@ public class StateTower extends Gamestate{
 		}
 	}
 
-	public AttackData playerAttack(AttackType type) {
+	public void playerAttack(AttackType type) {
 		AttackData playerData = player.attack(type);
 		attackData.add(playerData);
 		attackTimer.add(ATTACKDATA_TIMER);
@@ -242,34 +266,31 @@ public class StateTower extends Gamestate{
 			floorClear = true;
 		}
 		player.incInitiativeStack();
-		return playerData;
 	}
 
-	public AttackData monsterAttack() {
-		AttackData monsterData = monster.attack(AttackType.values()[RANDOM.nextInt(AttackType.values().length)]);
+	public void monsterAttack() {
+		AttackData monsterData = monster.attack(AttackType.values()[rnd.nextInt(AttackType.values().length)]);
 		attackData.add(monsterData);
 		attackTimer.add(ATTACKDATA_TIMER);
 		if (monsterData.kill) {
 			newGame = true;
 		}
-		return monsterData;
 	}
 
 
     @Override
     public void render(final Graphics g)
 	{
-		if(floor == 66 || floor == 666) {
-			g.drawImage(ImageLoader.background4, 0, 0, 1280, 720, null);
-
-		}else if (floor>50) {
-			g.drawImage(ImageLoader.background3, 0, 0, 1280, 720, null);
+		if(floor == 66 || floor == 666) { // Magic number for Constants for easter egg backgrounds
+			g.drawImage(ImageLoader.backgroundHell, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
+		}else if (floor>50) { // Magic number above floor 50 the background changes
+			g.drawImage(ImageLoader.background50, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 
 		}else{
-			//(ImageLoader.background1, ImageLoader.background2);
-			g.drawImage(ImageLoader.background1, 0, 0, 1280, 720, null);
+			g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		}
-		player.render(g,10,40);
+		final int playerY = 40;
+		player.render(g,10,playerY); // Magic number: Player relative position
 
 		renderFloor(g);
 				
@@ -281,6 +302,7 @@ public class StateTower extends Gamestate{
     public void renderFloor(Graphics g)
     {
 
+		final int lineSize = 30;
 		if(floorClear) {
 			if(!player.didLevelUp())
 			{
@@ -289,7 +311,7 @@ public class StateTower extends Gamestate{
 				g.setFont(FontLoader.mono20);
 				Renderer.renderTextShadow(g, "NEW", PunchPanel.WIDTH / 2 + 10, PunchPanel.HEIGHT / 2 - item.getStats().getHeight() / 2 - 5, false);
 				item.render(g,PunchPanel.WIDTH/2 + 10,PunchPanel.HEIGHT/2-item.getStats().getHeight()/2);
-				
+
 				Item playerItem = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal());
 				if (playerItem != null) {
 					// RENDER PLAYER ITEM STATS
@@ -298,56 +320,60 @@ public class StateTower extends Gamestate{
 					playerItem.render(g, PunchPanel.WIDTH / 2 - playerItem.getStats().getWidth() - 10, PunchPanel.HEIGHT / 2 - playerItem.getStats().getHeight() / 2);
 				}
 				// RENDER TEXT TO SCREEN
-				Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true);
-				Renderer.renderTextShadow(g, "Press SPACE to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 60, true);
+				Renderer.renderTextShadow(g, "Press E to equip the new item and move on! For GLORY!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + lineSize, true);
+				Renderer.renderTextShadow(g, "Press SPACE to leave it and move on! I aint no BITCH!",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + lineSize * 2, true);
 			}
 			else
 			{
+				final int levelUpTextY = 400;
 				g.setColor(Color.WHITE);
 				g.setFont(FontLoader.mono72);
-				Renderer.renderTextShadow(g, "Level Up!", PunchPanel.WIDTH/2, 400, true);
+				Renderer.renderTextShadow(g, "Level Up!", PunchPanel.WIDTH/2, levelUpTextY, true);
 				g.setFont(FontLoader.mono20);
 				// RENDER SPEC TO SCREEN
-				Renderer.renderTextShadow(g, "Press F1 to spec in INITIATIVE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 30, true,true);
-				Renderer.renderTextShadow(g, "Press F2 to spec in ATTACK",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 70, true,true);
-				Renderer.renderTextShadow(g, "Press F3 to spec in DEFENCE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + 110, true,true);
+				Renderer.renderTextShadow(g, "Press F1 to spec in INITIATIVE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + lineSize, true,true);
+				Renderer.renderTextShadow(g, "Press F2 to spec in ATTACK",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + lineSize*2, true,true);
+				Renderer.renderTextShadow(g, "Press F3 to spec in DEFENCE",PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + item.getStats().getHeight()/2 + lineSize*3, true,true);
 				
 			}
 		} else {
-			monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, 40);
+			final int textOffset = 200;
+			final int monsterY = 40;
+			monster.render(g, PunchPanel.WIDTH-monster.getStats().getWidth()-10, monsterY);
 			g.setColor(Color.WHITE);
-			Renderer.renderTextShadow(g, "1: quick attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2-25, true);
-			Renderer.renderTextShadow(g, "2: normal attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2, true);
-			Renderer.renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-200, PunchPanel.HEIGHT/2+25, true);
+			Renderer.renderTextShadow(g, "1: quick attack", PunchPanel.WIDTH/2-textOffset, PunchPanel.HEIGHT/2, false);
+			Renderer.renderTextShadow(g, "2: normal attack", PunchPanel.WIDTH/2-textOffset, PunchPanel.HEIGHT/2+lineSize, false);
+			Renderer.renderTextShadow(g, "3: heavy attack", PunchPanel.WIDTH/2-textOffset, PunchPanel.HEIGHT/2+lineSize*2, false);
 		}
 		
 		g.setFont(FontLoader.mono72);
 		g.setColor(Color.WHITE);
 		Renderer.renderTextShadow(g, "Floor:"+floor, PunchPanel.WIDTH/2, 100, true);
-		if (floor < 13) {
+		if (floor < TUTORIAL_FLOOR) {
+			final int textY = 180;
 			g.setFont(FontLoader.mono40);
-			Renderer.renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, 180, true);
+			Renderer.renderTextShadow(g, "TUTORIAL FLOOR", PunchPanel.WIDTH/2, textY, true);
 		}
     }
-    
-    public void spec(int stat)
-    {
-    	
-    }
-    
+
     public void renderAttackData(Graphics g)
     {
+		final int yPos = 300;
+		final int gravity = 300;
+		final int xMonsterOffset = 300;
+		final int xPlayerOffset = 200;
 		g.setFont(FontLoader.sans72);
 		for(int i = 0;i<attackData.size();i++)
 		{
 			AttackData data = attackData.get(i);
+
 			if(data.attacker instanceof Player)
 			{
-				Renderer.renderNumberDrop(g, 2.0f-attackTimer.get(i), PunchPanel.WIDTH-300, 300, 100, -100, 300, data.toString(), Color.RED);
+				Renderer.renderNumberDrop(g, ATTACKDATA_TIMER-attackTimer.get(i), PunchPanel.WIDTH-xMonsterOffset, yPos, 100, -100, gravity, data.toString(), Color.RED);
 			}
 			else
 			{
-				Renderer.renderNumberDrop(g, 2.0f-attackTimer.get(i), 200, 300, 100, -100, 300, data.toString(), Color.RED);
+				Renderer.renderNumberDrop(g, ATTACKDATA_TIMER-attackTimer.get(i), xPlayerOffset, yPos, 100, -100, gravity, data.toString(), Color.RED);
 			}
 		}
     }
@@ -357,8 +383,12 @@ public class StateTower extends Gamestate{
     	g.setFont(FontLoader.mono40);
 		if (newGame) {
 			g.setColor(Color.WHITE);
-			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - 512, PunchPanel.HEIGHT/2 - 100, 1024, 400, null);
-			Renderer.renderTextShadow(g, "Press SPACE to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + 150, true);
+			final int deadTextWidth = 1024;
+			final int deadTextHeight = 400;
+			final int deadTextY = 100;
+			final int deadText2Y = 150;
+			g.drawImage(ImageLoader.deadText, PunchPanel.WIDTH/2 - deadTextWidth/2, PunchPanel.HEIGHT/2 - deadTextY, deadTextWidth, deadTextHeight, null);
+			Renderer.renderTextShadow(g, "Press SPACE to play again or ESC to exit.", PunchPanel.WIDTH/2, PunchPanel.HEIGHT/2 + deadText2Y, true);
 		}
     }
 

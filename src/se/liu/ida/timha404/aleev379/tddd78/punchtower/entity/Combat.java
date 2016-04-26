@@ -1,5 +1,10 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.entity;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
@@ -9,10 +14,11 @@ import java.util.Random;
  * This class handles the combat of the game. With algorithms for attacking and blocking.
  */
 public final class Combat {
+
 	/**
 	 * Random number generator for the combat.
 	 */
-	public static final Random RANDOM = new Random();
+	private static final Random RANDOM = new Random();
 
 	private Combat(){}
 
@@ -28,9 +34,9 @@ public final class Combat {
 
 		double damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
 		StateTower tower = (StateTower)GamestateHandler.getInstance().getCurrentGamestate();
-		if (attacker instanceof Player && tower.getFloor() < 13) { // Magic number represents the number of tutorial floors.
-			int damageMult =(int)  ((15 - tower.getFloor())*0.25 + 1); // Magic numbers used to make the game easier in the beginning.
-			if (((Player)attacker).getPlayerType()==PlayerType.STAN) {
+		if (attacker instanceof Player && tower.getFloor() < StateTower.TUTORIAL_FLOOR) { // Magic number represents the number of tutorial floors.
+			int damageMult =(int)  ((StateTower.TUTORIAL_FLOOR - tower.getFloor())*0.25 + 1); // Magic numbers used to make the game easier in the beginning.
+			if (((Player)attacker).getPlayerType() == PlayerType.STAN) {
 				damageMult += 0.5; // Magic number represents a damage modifier to make other characters other than speedy stan playable.
 			}
 			damage *= damageMult;
@@ -40,7 +46,7 @@ public final class Combat {
 		}
 		if (!hit) damage=0;
 		boolean kill = (damage >= defender.hp);
-		defender.hp -= damage;
+		defender.hp -= (int)damage;
 		defender.hp = defender.hp < 0 ? 0 : defender.hp;
 		AttackData data =new AttackData(attacker, defender, hit, crit, kill, (int)damage);
 

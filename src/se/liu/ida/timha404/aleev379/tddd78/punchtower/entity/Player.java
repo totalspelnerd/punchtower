@@ -1,5 +1,17 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.entity;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Experience;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.Rarity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
@@ -13,6 +25,8 @@ public class Player extends Entity{
 
 	private PlayerType playerType;
 
+	private static final int BASIC_GEAR_STAT = 25;
+
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 	private int lastLevel;
 	private int level;
@@ -20,13 +34,13 @@ public class Player extends Entity{
 
 
 	public Player(PlayerType type, final int initiative, final int attack, final int defense) {
-		super(new Stats(type.name, initiative, attack, defense), STANDARD_HP, type.name);
+		super(new Stats(type.name, initiative, attack, defense), STANDARD_HP);
 		playerType = type;
 		lastLevel = 1;
 		level = 1;
 		xp = 0;
 		for (int i = 0; i < equipped.length; i++) {
-			equip(new Item(ItemType.values()[i],25, 25, 25, Rarity.NORMAL),i); // Magic numbers for starter item stats
+			equip(new Item(ItemType.values()[i], BASIC_GEAR_STAT, BASIC_GEAR_STAT, BASIC_GEAR_STAT, Rarity.NORMAL), i); // Magic numbers for starter item stats
 		}
 	}
 
@@ -41,7 +55,7 @@ public class Player extends Entity{
 	 */
 
 	public void equip(final Item item, final int itemIndex) {
-		Stats temp = stats.clone();
+		Stats temp = Stats.clone(stats);
 		if (equipped[itemIndex] != null) {
 			stats.decrease(equipped[itemIndex].getStats());
 
@@ -82,18 +96,18 @@ public class Player extends Entity{
 		return Combat.attack(this, monster, type);
 	}
 	
-	public void spec(int stat)
+	public void spec(StatType stat)
 	{
 		switch (stat) { // Magic numbers to maintain balance
-		case 0:
-			stats.initiative += (int) (10*Math.pow(2, lastLevel/8.0));
-			break;
-		case 1:
-			stats.attack += (int) (10*Math.pow(2, lastLevel/8.0));
-			break;
-		case 2:
-			stats.defense += (int) (10*Math.pow(2, lastLevel/8.0));
-			break;
+			case INITIATIVE:
+				stats.initiative += (int) (10*Math.pow(2, lastLevel/8.0));
+				break;
+			case ATTACK:
+				stats.attack += (int) (10*Math.pow(2, lastLevel/8.0));
+				break;
+			case DEFENSE:
+				stats.defense += (int) (10*Math.pow(2, lastLevel/8.0));
+				break;
 		}
 		lastLevel++;
 	}
@@ -111,7 +125,7 @@ public class Player extends Entity{
 		assert(lastLevel == level) : "lastLevel can't be different from level: " + lastLevel + " "+level;
 		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
 		xp += monster.stats.getTotal();
-		while(xp > Experience.getXp(level+1))
+		while(xp > Experience.getXp(level + 1))
 		{
 			level++;
 		}
@@ -120,14 +134,20 @@ public class Player extends Entity{
 
 	public void render(Graphics g, int x, int y)
 	{
-		stats.render(g,x,y,new Color(0x00bb00));
-		g.drawImage(ImageLoader.player,x+100,y+200,200,400,null);
-		Renderer.renderProgression(g,x+stats.getWidth()+10,y,200,20,Color.RED, Color.GREEN,0, STANDARD_HP,hp);
-		Renderer.renderProgression(g,x+stats.getWidth()+10,y+20,200,10,Color.YELLOW.darker().darker(), Color.YELLOW,0, STACK_CAP,(int)initiativeStack);
+		stats.render(g,x,y,new Color(0x00bb00)); // magic number is a little dark green color (Better looking than Color.GREEN.darker())
+		final int playerYOffset = 200;
+		final int playerWidth = 200;
+		final int playerHeight = 400;
+		final int progressionBarWidth = 200;
+		final int progressionBarHeight = 20;
+		final int lineSize = 30;
+		g.drawImage(ImageLoader.player, x + 100, y + playerYOffset, playerWidth, playerHeight, null);
+		Renderer.renderProgression(g, x + stats.getWidth() + 10, y, progressionBarWidth, progressionBarHeight, Color.RED, Color.GREEN, 0, STANDARD_HP, hp);
+		Renderer.renderProgression(g,x+stats.getWidth()+10,y+progressionBarHeight,progressionBarWidth,progressionBarHeight/2,Color.YELLOW.darker().darker(), Color.YELLOW,0, STACK_CAP,(int)initiativeStack);
 		g.setFont(FontLoader.mono20);
 		g.setColor(Color.CYAN);
-		Renderer.renderTextShadow(g, "lvl: "+level, x+stats.getWidth()+10, y+45, false);
-		Renderer.renderProgression(g, x+stats.getWidth()+10, y+50, 200, 10, Color.BLUE.darker().darker(), Color.BLUE, Experience.getXp(level), Experience.getXp(level+1), xp);
+		Renderer.renderTextShadow(g, "lvl: "+level, x+stats.getWidth()+10, y+progressionBarHeight+lineSize, false);
+		Renderer.renderProgression(g, x+stats.getWidth()+10, y+progressionBarHeight+lineSize+5, progressionBarWidth, 10, Color.BLUE.darker().darker(), Color.BLUE, Experience.getXp(level), Experience.getXp(level+1), xp);
 	}
 
 	public PlayerType getPlayerType()

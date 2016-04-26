@@ -21,7 +21,7 @@ public class PunchFrame extends JFrame
     public PunchFrame()
     {
 	panel = new PunchPanel();
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	setTitle("PunchTower");
 	setContentPane(panel);
 	setFocusable(true);

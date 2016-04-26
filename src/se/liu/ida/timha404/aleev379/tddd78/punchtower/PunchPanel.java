@@ -18,6 +18,7 @@ public class PunchPanel extends JPanel implements KeyListener
      * Width of the panel
      */
     public static final int WIDTH = 1280;
+
     /**
      * Height of the panel
      */
@@ -38,9 +39,10 @@ public class PunchPanel extends JPanel implements KeyListener
     {
 		super.paintComponent(g);
 		GamestateHandler.getInstance().render(g);
-		g.setFont(new Font(Font.MONOSPACED,Font.PLAIN,20));
+		g.setFont(FontLoader.mono20);
 		g.setColor(Color.WHITE);
-		Renderer.renderTextShadow(g,Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,20,false);
+
+		Renderer.renderTextShadow(g,Integer.toString(PunchTower.getInstance().getFPS())+" FPS",10,FontLoader.mono20.getSize(),false);
 		PunchTower.getInstance().addFrames();
     }
 

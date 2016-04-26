@@ -5,6 +5,9 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
  */
 
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.Rarity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import java.util.Random;
@@ -59,17 +62,20 @@ public class Item{
 			rarity = Rarity.NORMAL;
 		}
 
-		double exponent = 1.3;
+		final double exponent = 1.3;
 		double ini = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
 		double def = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
 		double atk = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
 
-		if (floor > 15 && floor < 80) {
-			ini *= 0.85;
-			atk *= 0.85;
-			def *= 0.85;
+		if (floor > StateTower.TUTORIAL_FLOOR && floor < 100) {
+			final double nerfMod = 0.85; // Modifier to nerf the game between the floors StateTower.TUTORIAL_FLOOR and 100
+			ini *= nerfMod;
+			atk *= nerfMod;
+			def *= nerfMod;
 		}
-		if (rarity == Rarity.LEGENDARY && rnd.nextDouble() >= 0.5) {
+		final double ancientLegendaryChance = 0.5;
+
+		if (rarity == Rarity.LEGENDARY && rnd.nextDouble() >= ancientLegendaryChance) {
 			StatType stat = StatType.values()[rnd.nextInt(3)];
 			switch(stat) {
 				case INITIATIVE:

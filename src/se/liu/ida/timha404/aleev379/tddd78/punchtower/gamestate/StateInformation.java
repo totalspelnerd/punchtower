@@ -2,7 +2,7 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
@@ -55,7 +55,7 @@ public class StateInformation extends Gamestate
 	public void render(final Graphics g)
 	{
 
-		g.drawImage(ImageLoader.background1, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
+		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		String text = "";
 		switch(state)
 		{
