@@ -23,7 +23,7 @@ public class Monster extends Entity{
 	private final static int MONSTER_OFFSET_Y = 200;
 	private final static int MONSTER_WIDTH = 450;
 	private final static int MONSTER_HEIGHT = 450;
-	private final static int HEALTH_OFFSET_X = 210;
+	private final static int HEALTH_OFFSET_X = 220;
 	private final static int HEALTH_WIDTH = 210;
 	private final static int HEALTH_HEIGHT = 20;
 
@@ -36,8 +36,7 @@ public class Monster extends Entity{
 
 		stats.render(g,x,y,new Color(0xaa0000)); // Darker red border around the stats.
 		g.drawImage(ImageLoader.monster, x - MONSTER_OFFSET_X, y + MONSTER_OFFSET_Y, MONSTER_WIDTH, MONSTER_HEIGHT, null);
-		Renderer
-			.renderProgression(g, x - HEALTH_OFFSET_X, y, HEALTH_WIDTH, HEALTH_HEIGHT, Color.red, Color.green, 0, STANDARD_HP, hp);
+		Renderer.renderProgression(g, x - HEALTH_OFFSET_X, y, HEALTH_WIDTH, HEALTH_HEIGHT, Color.red, Color.green, 0, STANDARD_HP, hp);
 
 	}
 
