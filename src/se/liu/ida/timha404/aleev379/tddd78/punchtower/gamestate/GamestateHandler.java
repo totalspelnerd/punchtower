@@ -15,12 +15,12 @@ import java.awt.*;
  * @see PunchTower
  */
 
-public class GamestateHandler
+public final class GamestateHandler
 {
     /**
      * Current gamestate that should be rendered and updated
      */
-    private Gamestate currentGamestate;
+    private Gamestate currentGamestate = null;
 
     /**
      * instance of the gamestate handler

@@ -1,6 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
@@ -15,12 +17,12 @@ import java.awt.event.ActionEvent;
 public class StateInformation extends Gamestate
 {
 
-	private int playerIndex;
+	private PlayerType playerType;
 	private int state = 0;
 
-	public StateInformation(int playerIndex)
+	public StateInformation(PlayerType playerType)
 	{
-		this.playerIndex= playerIndex;
+		this.playerType = playerType;
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
 		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "next");
 		panel.getActionMap().put("next", new AbstractAction()
@@ -31,7 +33,7 @@ public class StateInformation extends Gamestate
 				{
 					panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
 					panel.getActionMap().remove("next");
-					GamestateHandler.getInstance().pushGamestate(new StateTower(StateInformation.this.playerIndex));
+					GamestateHandler.getInstance().pushGamestate(new StateTower(StateInformation.this.playerType));
 				}
 			}
 		});
@@ -52,12 +54,13 @@ public class StateInformation extends Gamestate
 	@Override
 	public void render(final Graphics g)
 	{
+
 		g.drawImage(ImageLoader.background1, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		String text = "";
 		switch(state)
 		{
 			case 0:
-				text = "So you are " + StateMenu.names[playerIndex] + ", huh? Never heard of you.\nAs you will see the mechanics of the game are quite simple. A monster appears and you can choose from three different attacks; quick, normal and heavy. These are chosen with the buttons 1-3 on your keyboard.\n\nPress space to continue.";
+				text = "So you are " + playerType.name + ", huh? Never heard of you.\nAs you will see the mechanics of the game are quite simple. A monster appears and you can choose from three different attacks; quick, normal and heavy. These are chosen with the buttons 1-3 on your keyboard.\n\nPress space to continue.";
 				break;
 			case 1:
 				text = "When you have killed a monster with your amazing skills, he will drop a piece of loot for you. This loot will be armor or weapons you can use in furure fights. If you want to replace your current item you press E, if not press ENTER.\n\nPress SPACE to continue.";
@@ -67,7 +70,8 @@ public class StateInformation extends Gamestate
 				break;
 		}
 		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 30));
-		Renderer.renderTextMultiLine(g,text,100,100,1100);
+		g.setFont(FontLoader.mono30);
+		int xOffset = 100;
+		Renderer.renderTextMultiLine(g,text,xOffset,100,PunchPanel.WIDTH - xOffset * 2);
 	}
 }

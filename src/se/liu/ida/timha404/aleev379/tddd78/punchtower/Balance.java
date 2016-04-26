@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 public class Balance{
-	public static StateTower tower = new StateTower(0) ;
+	public static StateTower tower = new StateTower(PlayerType.STAN) ;
 
 	public static void thing() {
 		tower.init();

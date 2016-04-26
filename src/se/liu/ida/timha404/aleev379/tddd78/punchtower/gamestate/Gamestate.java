@@ -1,9 +1,6 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * This class is generally used to handle different states in the game. Such as mainmenu, optionmenu or ingame.
@@ -28,7 +25,7 @@ public abstract class Gamestate
     /**
      * Tick of the game. Called once every second.
      */
-    public void tick() {}
+    public void tick() {} // Doesn't need to be implemented for every state.
 
     /**
      * Rneders the game.

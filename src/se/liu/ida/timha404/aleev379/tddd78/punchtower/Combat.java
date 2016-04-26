@@ -1,5 +1,6 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import java.util.Random;
@@ -7,28 +8,7 @@ import java.util.Random;
 /**
  * This class handles the combat of the game. With algorithms for attacking and blocking.
  */
-public class Combat {
-
-	// The hit chance of the different attacks
-	public static final double HIT_CHANCE_QUICK = 1.0;
-	public static final double HIT_CHANCE_NORMAL = 0.85;
-	public static final double HIT_CHANCE_HEAVY = 0.75;
-
-	// The crit chance of the different attacks
-	public static final double CRIT_CHANCE_QUICK = 0.05;
-	public static final double CRIT_CHANCE_NORMAL = 0.1;
-	public static final double CRIT_CHANCE_HEAVY = 0.15;
-
-	// The damage modifier for the different attacks
-	public static final double QUICK_MOD = 1;
-	public static final double NORMAL_MOD = 1.4;
-	public static final double HEAVY_MOD = 2;
-
-	// The index of the attack
-	public static final int ATTACK_QUICK = 0;
-	public static final int ATTACK_NORMAL = 1;
-	public static final int ATTACK_HEAVY = 2;
-
+public final class Combat {
 	/**
 	 * Random number generator for the combat.
 	 */
@@ -36,49 +16,33 @@ public class Combat {
 
 	private Combat(){}
 
-	public static AttackData attack(final Entity attacker, final Entity defender, final int attackType) {
-		boolean hit = false;
-		boolean crit = false;
-		double dmgMod = 0.0;
-		switch(attackType) {
-			case ATTACK_QUICK:
-				hit = (RANDOM.nextDouble() <= HIT_CHANCE_QUICK);
-				crit = (RANDOM.nextDouble() <= CRIT_CHANCE_QUICK);
-				dmgMod = QUICK_MOD;
-				break;
-			case ATTACK_NORMAL:
-				hit = (RANDOM.nextDouble() <= HIT_CHANCE_NORMAL);
-				crit = (RANDOM.nextDouble() <= CRIT_CHANCE_NORMAL);
-				dmgMod = NORMAL_MOD;
-				break;
-			case ATTACK_HEAVY:
-				hit = (RANDOM.nextDouble() <= HIT_CHANCE_HEAVY);
-				crit = (RANDOM.nextDouble() <= CRIT_CHANCE_HEAVY);
-				dmgMod = HEAVY_MOD;
-				break;
-		}
+	public static AttackData attack(final Entity attacker, final Entity defender, final AttackType attackType) {
+		boolean hit = (RANDOM.nextDouble() <= attackType.hitChance);
+		boolean crit = (RANDOM.nextDouble() <= attackType.critChance);
+		double dmgMod = attackType.dmgModifier;
 		return calcDamage(attacker, defender, hit, crit, dmgMod);
 
 	}
 
 	public static AttackData calcDamage(Entity attacker, Entity defender, boolean hit, boolean crit, double typeMod) {
 
-		int damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
-		if (attacker instanceof Player && StateTower.floor < 13) {
-			int damageMult =(int)  ((15 - StateTower.floor)*0.25 + 1);
-			if (attacker.getName() != "Speedy Stan") {
-				damageMult += 0.5;
+		double damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
+		StateTower tower = (StateTower)GamestateHandler.getInstance().getCurrentGamestate();
+		if (attacker instanceof Player && tower.getFloor() < 13) { // Magic number represents the number of tutorial floors.
+			int damageMult =(int)  ((15 - tower.getFloor())*0.25 + 1); // Magic numbers used to make the game easier in the beginning.
+			if (((Player)attacker).getPlayerType()==PlayerType.STAN) {
+				damageMult += 0.5; // Magic number represents a damage modifier to make other characters other than speedy stan playable.
 			}
 			damage *= damageMult;
 		}
 		if (crit) {
-			damage *= (int) (RANDOM.nextDouble()*0.5+1.7); // These magic numbers are used to set the critical hit modifier.
+			damage *= (RANDOM.nextDouble()*0.5+1.7); // These magic numbers are used to set the critical hit modifier. number between 1.7-2.2
 		}
 		if (!hit) damage=0;
 		boolean kill = (damage >= defender.hp);
 		defender.hp -= damage;
 		defender.hp = defender.hp < 0 ? 0 : defender.hp;
-		AttackData data =new AttackData(attacker, defender, hit, crit, kill, damage);
+		AttackData data =new AttackData(attacker, defender, hit, crit, kill, (int)damage);
 
 		return data;
 	}

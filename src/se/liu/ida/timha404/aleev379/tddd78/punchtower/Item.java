@@ -26,6 +26,10 @@ public class Item{
 		this.rarity = rarity;
 	}
 
+	/**
+	 *
+	 * @return the stats of the item.
+	 */
 	public Stats getStats()
 	{
 		return stats;
@@ -37,55 +41,50 @@ public class Item{
 
 	/**
 	 * This method is used to generate a new Item based on the current drop rates and the current floor.
-	 * @param  curTower The current tower object
+	 * @param floor The current floor of the tower
 	 * @return A new item
 	 */
-
-	public static Item generateRandomItem(StateTower curTower) {
+	public static Item generateRandomItem(int floor) {
 		Random rnd = new Random();
 		double drop = rnd.nextDouble();
-		Rarity thisRarity;
-		double rarityMod;
+		Rarity rarity;
 
-		if (drop <= curTower.getLegendaryDropChance()) {
-			thisRarity = Rarity.LEGENDARY;
-			rarityMod = 3;
-		} else if (drop <= curTower.getEpicDropChance()) {
-			thisRarity = Rarity.EPIC;
-			rarityMod = 2;
-		} else if (drop <= curTower.getRareDropChance()) {
-			thisRarity = Rarity.RARE;
-			rarityMod = 1.5;
+		if (drop <= StateTower.LEGENDARY_DROP_CHANCE) {
+			rarity = Rarity.LEGENDARY;
+		} else if (drop <= StateTower.EPIC_DROP_CHANCE) {
+			rarity = Rarity.EPIC;
+		} else if (drop <= StateTower.RARE_DROP_CHANCE) {
+			rarity = Rarity.RARE;
 		} else {
-			thisRarity = Rarity.NORMAL;
-			rarityMod = 1;
+			rarity = Rarity.NORMAL;
 		}
 
 		double exponent = 1.3;
-		int ini = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		int def = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		int atk = (int)(rnd.nextInt(100)+Math.pow(curTower.getFloor(),exponent)*rarityMod);
-		if (StateTower.floor >15 || StateTower.floor < 80) {
+		double ini = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
+		double def = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
+		double atk = rnd.nextInt(100)+Math.pow(floor,exponent)*rarity.modifier;
+
+		if (floor > 15 && floor < 80) {
 			ini *= 0.85;
 			atk *= 0.85;
 			def *= 0.85;
 		}
-		if (thisRarity == Rarity.LEGENDARY && rnd.nextDouble() >= 0.5) {
-			int temping = rnd.nextInt(3);
-			switch(temping) {
-				case 0:
-					ini *=(int) rarityMod;
+		if (rarity == Rarity.LEGENDARY && rnd.nextDouble() >= 0.5) {
+			StatType stat = StatType.values()[rnd.nextInt(3)];
+			switch(stat) {
+				case INITIATIVE:
+					ini *=(int) rarity.modifier;
 					break;
-				case 1:
-					atk *=(int) rarityMod;
+				case ATTACK:
+					atk *=(int) rarity.modifier;
 					break;
-				case 2:
-					def *=(int) rarityMod;
+				case DEFENSE:
+					def *=(int) rarity.modifier;
 					break;
 			}
 		}
 
-		Item thisItem = new Item(ItemType.randomItemType(),ini,atk,def,thisRarity);
+		Item thisItem = new Item(ItemType.randomItemType(),(int)ini,(int)atk,(int)def,rarity);
 
 		return thisItem;
 	}

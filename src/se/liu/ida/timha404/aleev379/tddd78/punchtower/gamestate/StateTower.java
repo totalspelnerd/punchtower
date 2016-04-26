@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Entity;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
@@ -19,6 +20,7 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Monster;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Player;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
@@ -27,35 +29,50 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
  * Gamestate of our game. Here is where our game updates and renders. The main game logic is here.
  */
 public class StateTower extends Gamestate{
-    Item item = null;
-	public static int floor;
+
+	/**
+	 * Standard initiative value for players
+	 */
 	public static final int STD_INI = 50;
+
+	/**
+	 * Standard attack value for players
+	 */
 	public static final int STD_ATK = 50;
+
+	/**
+	 * Standard defence value for players
+	 */
 	public static final int STD_DEF = 50;
 
-	private double normalDropChance = 1.0;
-	private double rareDropChance = 0.2;
-	private double epicDropChance = 0.1;
-	private double legendaryDropChance = 0.02;
+	private Item item = null;
+	private int floor;
 
-	private Random rnd = new Random();
+	public static final float ATTACKDATA_TIMER = 2.0f;
+
+	public static final float NORMAL_DROP_CHANCE= 1.0f;
+	public static final float RARE_DROP_CHANCE= 0.2f;
+	public static final float EPIC_DROP_CHANCE= 0.1f;
+	public static final float LEGENDARY_DROP_CHANCE= 0.02f;
+
 	private Player player = null;
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
+	private static Random RANDOM = new Random();
 		
-	List<AttackData> attackData = new ArrayList<AttackData>();
-	List<Float> attackTimer = new ArrayList<Float>();
+	private List<AttackData> attackData = new ArrayList<AttackData>();
+	private List<Float> attackTimer = new ArrayList<Float>();
 	
 	//private int attackType = 0;
 
-    public StateTower(int playerIndex) {
-		player = new Player(playerIndex, STD_INI, STD_ATK, STD_DEF);
+    public StateTower(PlayerType type) {
+		player = new Player(type, STD_INI, STD_ATK, STD_DEF);
 	}
 
 	public void init() {
 		floor = 1;
-		item = Item.generateRandomItem(this);
+		item = Item.generateRandomItem(floor);
 		monster = Monster.generateMonster(floor);
 
 
@@ -94,7 +111,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(!player.didLevelUp())
-					attackEvent(0);
+					attackEvent(AttackType.QUICK);
 			}
 		});
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),"normalAttack");
@@ -102,7 +119,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(!player.didLevelUp())
-					attackEvent(1);
+					attackEvent(AttackType.NORMAL);
 			}
 		});
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),"heavyAttack");
@@ -110,7 +127,7 @@ public class StateTower extends Gamestate{
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(!player.didLevelUp())
-					attackEvent(2);
+					attackEvent(AttackType.HEAVY);
 			}
 		});
 		
@@ -160,7 +177,7 @@ public class StateTower extends Gamestate{
 		floor++;
 		monster = Monster.generateMonster(floor);
 		player.setHp(Entity.STANDARD_HP);
-		item = Item.generateRandomItem(this);
+		item = Item.generateRandomItem(floor);
 		floorClear = false;
 	}
 
@@ -169,57 +186,19 @@ public class StateTower extends Gamestate{
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
 	}
 
-	public double getNormalDropChance() {
-		return normalDropChance;
-	}
-
-	public void setNormalDropChance(final int normalDropChance) {
-		this.normalDropChance = normalDropChance;
-	}
-
-	public double getRareDropChance() {
-		return rareDropChance;
-	}
-
-	public void setRareDropChance(final int rareDropChance) {
-		this.rareDropChance = rareDropChance;
-	}
-
-	public double getEpicDropChance() {
-		return epicDropChance;
-	}
-
-	public void setEpicDropChance(final int epicDropChance) {
-		this.epicDropChance = epicDropChance;
-	}
-
-	public double getLegendaryDropChance() {
-		return legendaryDropChance;
-	}
-
-	public void setLegendaryDropChance(final int legendaryDropChance) {
-		this.legendaryDropChance = legendaryDropChance;
-	}
-
 	public Player getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(final Player player) {
-		this.player = player;
-	}
 
 	public Monster getMonster() {
 		return monster;
 	}
 
-	public void setMonster(final Monster curMonster) {
-		this.monster = curMonster;
-	}
-
     @Override
     public void update(final float timeElapsed)
     {
+		assert(attackData.size()==attackTimer.size()) : "attackData and attackTimer is not the same size, cannot map them together.";
     	for(int i = 0; i<attackData.size();i++)
     	{
     		float f = attackTimer.get(i).floatValue() - timeElapsed;
@@ -229,11 +208,12 @@ public class StateTower extends Gamestate{
     			attackData.remove(i);
     			attackTimer.remove(i);
     			i--;
+				// Since we are removing an object in the list we need to decrement i with one to be able to look through all the data and not just one
     		}
     	}
 	}
 
-	public void attackEvent(int type) {
+	public void attackEvent(AttackType type) {
 		if (floorClear || newGame)
 		{
 			return;
@@ -253,11 +233,10 @@ public class StateTower extends Gamestate{
 		}
 	}
 
-	public AttackData playerAttack(int type) {
+	public AttackData playerAttack(AttackType type) {
 		AttackData playerData = player.attack(type);
 		attackData.add(playerData);
-		attackTimer.add(2.0f);
-		assert(attackData.size()==attackTimer.size());
+		attackTimer.add(ATTACKDATA_TIMER);
 		if (playerData.kill) {
 			player.addXp();
 			floorClear = true;
@@ -267,10 +246,9 @@ public class StateTower extends Gamestate{
 	}
 
 	public AttackData monsterAttack() {
-		AttackData monsterData = monster.attack(0);
+		AttackData monsterData = monster.attack(AttackType.values()[RANDOM.nextInt(AttackType.values().length)]);
 		attackData.add(monsterData);
-		attackTimer.add(2.0f);
-		assert(attackData.size()==attackTimer.size());
+		attackTimer.add(ATTACKDATA_TIMER);
 		if (monsterData.kill) {
 			newGame = true;
 		}

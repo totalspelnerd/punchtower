@@ -1,6 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
@@ -14,35 +16,30 @@ import java.awt.event.ActionEvent;
  */
 public class StateMenu extends Gamestate {
 
-	/**
-	 * Names of all the playable characters. This doesn't need to be created more than once since it's always the same.
-	 */
-	public static final String[] names = {"Speedy Stan","Brutal Brick","Tanky Ted"};
-
 	@Override
 	public void init() {
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "stan");
-		panel.getActionMap().put("stan", new AbstractAction()
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), PlayerType.STAN.name);
+		panel.getActionMap().put(PlayerType.STAN.name, new AbstractAction()
 				{
 					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(0));
+						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.STAN));
 						removeKeystrokes();
 					}
 				});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),"brick");
-		panel.getActionMap().put("brick", new AbstractAction()
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),PlayerType.BRICK.name);
+		panel.getActionMap().put(PlayerType.BRICK.name, new AbstractAction()
 				{
 					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(1));
+						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.BRICK));
 						removeKeystrokes();
 					}
 				});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),"ted");
-		panel.getActionMap().put("ted", new AbstractAction()
+		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),PlayerType.TED.name);
+		panel.getActionMap().put(PlayerType.TED.name, new AbstractAction()
 				{
 					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(2));
+						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.TED));
 						removeKeystrokes();
 					}
 				});
@@ -63,20 +60,22 @@ public class StateMenu extends Gamestate {
 		String atkGuy = "Who needs defense when I can have a POWERFUL offense.";
 		String defGuy = "Defense if the BEST offense. Nothing can hurt me.";
 
-		g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 30));
+		g.setFont(FontLoader.mono30);
 		g.setColor(Color.WHITE);
-		Renderer.renderTextMultiLine(g, description, 100, 100, 1100);
 
-		g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 23));
+		int xOffset = 100;
+		Renderer.renderTextMultiLine(g, description, xOffset, 100, PunchPanel.WIDTH - xOffset * 2);
+
+		g.setFont(FontLoader.mono20);
 
 		g.setColor(Color.YELLOW);
-		Renderer.renderTextMultiLine(g, "1. " + names[0]+"\n"+iniGuy, 150, 500, 320);
+		Renderer.renderTextMultiLine(g, "1. " + PlayerType.STAN.name+"\n"+iniGuy, 150, 500, 320); // Magic numbers to position speedy stan information
 
 		g.setColor(Color.RED);
-		Renderer.renderTextMultiLine(g,"2. " + names[1]+"\n" + atkGuy, 515, 500, 270);
+		Renderer.renderTextMultiLine(g,"2. " + PlayerType.BRICK.name+"\n" + atkGuy, 515, 500, 270); // Magic numbers to position brutal brick information
 
 		g.setColor(Color.CYAN);
-		Renderer.renderTextMultiLine(g,"3. " + names[2]+"\n" +  defGuy, 800, 500, 290);
+		Renderer.renderTextMultiLine(g,"3. " + PlayerType.TED.name+"\n" +  defGuy, 800, 500, 290); // Magic numbers to position tanky ted information
 	}
 
 	private void removeKeystrokes()
@@ -85,9 +84,9 @@ public class StateMenu extends Gamestate {
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
 		panel.getInputMap().remove(KeyStroke.getKeyStroke("3"));
-		panel.getActionMap().remove("stan");
-		panel.getActionMap().remove("brick");
-		panel.getActionMap().remove("ted");
+		panel.getActionMap().remove(PlayerType.STAN.name);
+		panel.getActionMap().remove(PlayerType.BRICK.name);
+		panel.getActionMap().remove(PlayerType.TED.name);
 	}
 
 

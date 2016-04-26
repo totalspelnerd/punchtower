@@ -30,16 +30,16 @@ public class Monster extends Entity{
 
 	/**
 	 * Generates a new AttackData with information about an attack made by a monster
-	 * @param attackType represents the kind of attack used (not used for monsters atm)
+	 * @param type represents the kind of attack used (not used for monsters atm)
 	 * @return A new AttackData object with the details of the attack event
 	 */
-	public AttackData attack(int attackType) {
+	public AttackData attack(AttackType type) {
 		Player player = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getPlayer();
 
 		if (hp <= 0) {
 			return new AttackData(this, player, false, false, false, 0);
 		}
-		return Combat.attack(this, player, rnd.nextInt(3));
+		return Combat.attack(this, player, type);
 
 	}
 

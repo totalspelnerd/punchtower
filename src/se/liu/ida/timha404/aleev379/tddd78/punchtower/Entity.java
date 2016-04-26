@@ -69,7 +69,7 @@ public abstract class Entity{
 	}
 
 
-	public abstract AttackData attack(int attackType);
+	public abstract AttackData attack(AttackType type);
 	public abstract void render(Graphics g, int x, int y);
 
 }

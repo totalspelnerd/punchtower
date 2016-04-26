@@ -1,7 +1,6 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import java.awt.*;
@@ -11,15 +10,8 @@ import java.awt.*;
  */
 
 public class Player extends Entity{
-/*
-	public static final int ITEM_HEAD= 0;
-	public static final int ITEM_SHOULDER= 1;
-	public static final int ITEM_CHEST= 2;
-	public static final int ITEM_LEGS= 3;
-	public static final int ITEM_BOOTS= 4;
-	public static final int ITEM_WEAPON= 5;
-*/
-	private int playerIndex;
+
+	private PlayerType playerType;
 
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 	private int lastLevel;
@@ -27,9 +19,9 @@ public class Player extends Entity{
 	private int xp;
 
 
-	public Player(int playerIndex, final int initiative, final int attack, final int defense) {
-		super(new Stats(StateMenu.names[playerIndex], initiative, attack, defense), STANDARD_HP, StateMenu.names[playerIndex]);
-		this.playerIndex = playerIndex;
+	public Player(PlayerType type, final int initiative, final int attack, final int defense) {
+		super(new Stats(type.name, initiative, attack, defense), STANDARD_HP, type.name);
+		playerType = type;
 		lastLevel = 1;
 		level = 1;
 		xp = 0;
@@ -56,19 +48,21 @@ public class Player extends Entity{
 		}
 		this.equipped[itemIndex] = item;
 		stats.increase(equipped[itemIndex].getStats());
-		switch (playerIndex) { // Magic numbers to adjust the balance of the game
-			case 0:
+
+		// All the following Magic numbers in this method is used to adjust the balance of the game. Testsed to make them good.
+		switch (playerType) {
+			case STAN:
 				if (temp.initiative < stats.initiative) {
 					stats.initiative += (int) Math.min(30, temp.initiative*0.1f);
 				}
 				break;
-			case 1:
+			case BRICK:
 				if (temp.attack < stats.attack) {
 					//stats.defense -= (25);
 					stats.attack += (int) Math.min(30, temp.attack*0.05f);
 				}
 				break;
-			case 2:
+			case TED:
 				if (temp.defense < stats.defense) {
 					//stats.attack -= (25);
 					stats.defense += (int) Math.min(50, temp.defense*0.1f);
@@ -80,12 +74,12 @@ public class Player extends Entity{
 
 	}
 
-	public AttackData attack(int attackType) {
+	public AttackData attack(AttackType type) {
 		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
 		if (hp <= 0) {
 			return new AttackData(this, monster, false, false, false, 0);
 		}
-		return Combat.attack(this, monster, attackType);
+		return Combat.attack(this, monster, type);
 	}
 	
 	public void spec(int stat)
@@ -134,5 +128,10 @@ public class Player extends Entity{
 		g.setColor(Color.CYAN);
 		Renderer.renderTextShadow(g, "lvl: "+level, x+stats.getWidth()+10, y+45, false);
 		Renderer.renderProgression(g, x+stats.getWidth()+10, y+50, 200, 10, Color.BLUE.darker().darker(), Color.BLUE, Experience.getXp(level), Experience.getXp(level+1), xp);
+	}
+
+	public PlayerType getPlayerType()
+	{
+		return playerType;
 	}
 }
