@@ -169,7 +169,7 @@ public class Player extends Entity{
 		return playerType;
 	}
 
-	public SaveFile saveToFile(SaveFile file)
+	public void saveToFile(SaveFile file)
 	{
 		file.addTag("playerType", Integer.toString(playerType.ordinal()));
 		file.addTag("xp",Integer.toString(xp));
@@ -183,7 +183,6 @@ public class Player extends Entity{
 			file.addTag("itemDef"+i,Integer.toString(equipped[i].getStats().defense));
 			file.addTag("itemRarity"+i,Integer.toString(equipped[i].getRarity().ordinal()));
 		}
-		return file;
 	}
 
 	public static Player loadFromFile(SaveFile file) throws TagException

@@ -10,16 +10,22 @@ import javax.swing.*;
 import java.io.File;
 
 /**
- * This class handles the saving and loading in the game.
+ * This class handles the saving and loading in the game. It doesn't need to be an object since it doesn't depend on anything from the outside.
  */
-public class SaveLoad
+public final class SaveLoad
 {
 
+	/**
+	 * Name of the save file
+	 */
 	public static final String SAVE_FILE = "save.dat";
+
+	private SaveLoad(){}
 
 	public static void save(StateTower tower)
 	{
-		SaveFile save = tower.saveToFile(new SaveFile(SAVE_FILE));
+		SaveFile save = new SaveFile(SAVE_FILE);
+		tower.saveToFile(save);
 		try
 		{
 			save.saveToFile();

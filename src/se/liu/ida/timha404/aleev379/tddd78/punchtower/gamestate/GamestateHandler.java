@@ -65,7 +65,7 @@ public final class GamestateHandler
     /**
      * Goes back to the last gametate
      */
-    public void goBack() // Could potentially be used in the future
+    public void goBack() // Could potentially be used in the future to pop gamestates
     {
 	if(currentGamestate.lastGamestate != null)
 	    currentGamestate = currentGamestate.lastGamestate;
@@ -75,7 +75,7 @@ public final class GamestateHandler
      * Goes back given amount of times
      * @param amount goes back this many amount of times.
      */
-    public void goBack(int amount) // Could potentially be used in the future
+    public void goBack(int amount) // Could potentially be used in the future to pop gamestates
     {
 	for(int i = 0;i<amount;i++)
 	    if(currentGamestate.lastGamestate != null)

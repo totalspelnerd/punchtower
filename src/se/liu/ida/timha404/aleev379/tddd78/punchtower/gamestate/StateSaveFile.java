@@ -13,10 +13,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * This gamestate is used to display if a save was found. If it is the user can choose to continue playing on it or start a new game.
+ */
 public class StateSaveFile extends Gamestate
 {
 
 	private boolean loadFail;
+	private String loadFailMessage = "";
 
 	@Override
 	public void init()
@@ -31,6 +35,7 @@ public class StateSaveFile extends Gamestate
 						GamestateHandler.getInstance().pushGamestate(SaveLoad.load("save.dat"));
 						removeKeystrokes();
 					} catch (LoadFailedException|TagException e1) {
+						loadFailMessage = e1.getMessage();
 						loadFail = true;
 					}
 				}
@@ -68,7 +73,7 @@ public class StateSaveFile extends Gamestate
 		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		if(loadFail)
 		{
-			String description = "The save file is corrupt and could not be read. Out of date or have you been tempering with it?";
+			String description = "The save file is corrupt and could not be read. Out of date or have you been tempering with it?\n" + loadFailMessage;
 			int xOffset = 100;
 			g.setColor(Color.WHITE);
 			g.setFont(FontLoader.mono40);
@@ -78,7 +83,7 @@ public class StateSaveFile extends Gamestate
 			Renderer.renderTextShadow(g, "Press SPACE to start new game.", PunchPanel.WIDTH >> 1, textPos, true);
 		}
 		else {
-			String description = "A save file has been detected, would you like to load it?";
+			String description = "A save file has been detected, would you like to load it to keep playing?";
 			int xOffset = 100;
 			g.setColor(Color.WHITE);
 			g.setFont(FontLoader.mono40);

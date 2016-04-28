@@ -1,32 +1,30 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveFile;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveLoad;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Monster;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.swing.*;
-
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveFile;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveLoad;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Monster;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
 
 /**
  * Gamestate of our game. Here is where our game updates and renders. The main game logic is here.
@@ -85,8 +83,8 @@ public class StateTower extends Gamestate{
 	private boolean floorClear = false;
 	private boolean newGame = false;
 
-	private List<AttackData> attackData = new ArrayList<AttackData>();
-	private List<Float> attackTimer = new ArrayList<Float>();
+	private List<AttackData> attackData = new ArrayList<>();
+	private List<Float> attackTimer = new ArrayList<>();
 
 	//private int attackType = 0;
 
@@ -179,7 +177,6 @@ public class StateTower extends Gamestate{
 					player.spec(StatType.ATTACK);
 			}
 		});
-		
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F3"),"specDef");
 		temp.getActionMap().put("specDef", new AbstractAction()
 		{
@@ -210,7 +207,6 @@ public class StateTower extends Gamestate{
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
 		if(!new File(SaveLoad.SAVE_FILE).delete())
 			JOptionPane.showMessageDialog(null,"Save file could not be deleted.\nGuess you can keep the save...","Delete failed",JOptionPane.ERROR_MESSAGE);
-
 	}
 
 	public Player getPlayer() {
@@ -411,11 +407,10 @@ public class StateTower extends Gamestate{
 		panel.getActionMap().remove("heavyAttack");
 	}
 
-	public SaveFile saveToFile(SaveFile file)
+	public void saveToFile(SaveFile file)
 	{
 		file.addTag("floor",Integer.toString(floor));
 		player.saveToFile(file);
-		return file;
 	}
 
 	public static StateTower loadFromFile(SaveFile file) throws TagException

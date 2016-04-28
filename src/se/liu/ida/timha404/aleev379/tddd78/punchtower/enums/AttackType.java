@@ -33,11 +33,11 @@ public enum AttackType
 	 */
 	public final float dmgModifier;
 
-	 private AttackType(float hitChance, float critChance, float dmgModifier)
-	 {
+	private AttackType(float hitChance, float critChance, float dmgModifier)
+	{
 		 this.hitChance = hitChance;
 		 this.critChance = critChance;
 		 this.dmgModifier = dmgModifier;
-	 }
+	}
 
  }

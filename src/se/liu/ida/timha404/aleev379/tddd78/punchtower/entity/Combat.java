@@ -1,8 +1,6 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower.entity;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
@@ -31,7 +29,7 @@ public final class Combat {
 	}
 
 	public static AttackData calcDamage(Entity attacker, Entity defender, boolean hit, boolean crit, double typeMod) {
-
+		assert(!attacker.equals(defender)) : "Attacker can't attack himself.";
 		double damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
 		StateTower tower = (StateTower)GamestateHandler.getInstance().getCurrentGamestate();
 		if (attacker instanceof Player && tower.getFloor() < StateTower.TUTORIAL_FLOOR) { // Magic number represents the number of tutorial floors.

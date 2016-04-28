@@ -48,7 +48,7 @@ public final class Renderer
 
 	public static void renderTextMultiLine(Graphics g, String text, int x, int y, int width, boolean background) {
 		String[] lines = text.split("\n");
-		List<String> complete = new ArrayList<String>();
+		List<String> complete = new ArrayList<>();
 		int longestLine = 0;
 		int lineLength = 0;
 		StringBuilder sb = new StringBuilder();

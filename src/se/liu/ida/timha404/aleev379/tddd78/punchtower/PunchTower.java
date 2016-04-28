@@ -105,6 +105,7 @@ public final class PunchTower
 			try {
 				Thread.sleep(1); // Needed to not "overheat" the CPU. We dont need to render more than 1000fps at any point anyways.
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 				// Doesn't matter if this happens
 				// Since this is more to controll the fps to a more exact time
 				// and to not overuse the CPU when it is not needed.

@@ -22,6 +22,12 @@ public class Entity{
 	 */
 	public static final int STACK_CAP = 300;
 
+	/**
+	 * Initiative increase
+	 */
+
+	public static final float INITIATIVE_INCREASE = 0.1f;
+
 	protected Stats stats;
 	protected int hp;
 	protected float initiativeStack;
@@ -42,7 +48,7 @@ public class Entity{
 
 	public void incInitiativeStack()
 	{
-		float inc = stats.initiative*0.1f; // 10% of initiative used to add to the stack to potentially do two attacks instead of one.
+		float inc = stats.initiative*INITIATIVE_INCREASE;
 		inc = inc > MAX_STACK_INC ? MAX_STACK_INC : inc;
 		initiativeStack += inc;
 		initiativeStack = initiativeStack > STACK_CAP ? STACK_CAP : initiativeStack;

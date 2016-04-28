@@ -72,7 +72,7 @@ public class SaveFile
 		}
 		catch(IOException e)
 		{
-			throw new SaveFailedException(e);
+			throw new SaveFailedException(filename, e);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class SaveFile
 			throw new LoadFailedException(filename);
 		try(BufferedReader br = new BufferedReader(new FileReader(file))){
 			String line;
-			while ((line = br.readLine()) != null) // This is standard way to create a file reader
+			while ((line = br.readLine()) != null) // This is the standard way to create a file reader
 			{
 				if (line.contains("=")) {
 					String[] values = line.split("=");
