@@ -22,9 +22,9 @@ public final class SaveLoad
 
 	private SaveLoad(){}
 
-	public static void save(StateTower tower)
+	public static void save(StateTower tower, String filename)
 	{
-		SaveFile save = new SaveFile(SAVE_FILE);
+		SaveFile save = new SaveFile(filename);
 		tower.saveToFile(save);
 		try
 		{
@@ -44,5 +44,12 @@ public final class SaveLoad
 		SaveFile file = new SaveFile(filename);
 		file.load();
 		return StateTower.loadFromFile(file);
+	}
+
+	public static void delete(String filename)
+	{
+		if (!new File(filename).delete()) JOptionPane
+			.showMessageDialog(null, "Save file could not be deleted.\nGuess you can keep the save...", "Delete failed",
+							   JOptionPane.ERROR_MESSAGE);
 	}
 }

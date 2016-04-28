@@ -20,7 +20,6 @@ public class StateSaveFile extends Gamestate
 {
 
 	private boolean loadFail;
-	private String loadFailMessage = "";
 
 	@Override
 	public void init()
@@ -35,7 +34,7 @@ public class StateSaveFile extends Gamestate
 						GamestateHandler.getInstance().pushGamestate(SaveLoad.load("save.dat"));
 						removeKeystrokes();
 					} catch (LoadFailedException|TagException e1) {
-						loadFailMessage = e1.getMessage();
+						// We dont need to use e1 for anything since we are handling the problem in another way.
 						loadFail = true;
 					}
 				}
@@ -48,6 +47,7 @@ public class StateSaveFile extends Gamestate
 				if(!loadFail) {
 					GamestateHandler.getInstance().pushGamestate(new StateMenu());
 					removeKeystrokes();
+					SaveLoad.delete(SaveLoad.SAVE_FILE);
 				}
 			}
 		});
@@ -58,6 +58,7 @@ public class StateSaveFile extends Gamestate
 				if(loadFail) {
 					GamestateHandler.getInstance().pushGamestate(new StateMenu());
 					removeKeystrokes();
+					SaveLoad.delete(SaveLoad.SAVE_FILE);
 				}
 			}
 		});
@@ -73,22 +74,18 @@ public class StateSaveFile extends Gamestate
 		g.drawImage(ImageLoader.background, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 		if(loadFail)
 		{
-			String description = "The save file is corrupt and could not be read. Out of date or have you been tempering with it?\n" + loadFailMessage;
+			String description = "The save file is corrupt and could not be read. Out of date or have you been tempering with it?\n\nPress SPACE to start a new game.";
 			int xOffset = 100;
 			g.setColor(Color.WHITE);
-			g.setFont(FontLoader.mono40);
-			Renderer.renderTextMultiLine(g, description, xOffset, 100, PunchPanel.WIDTH - xOffset * 2);
 			g.setFont(FontLoader.mono30);
-			final int textPos = 300;
-			Renderer.renderTextShadow(g, "Press SPACE to start new game.", PunchPanel.WIDTH >> 1, textPos, true);
+			Renderer.renderTextMultiLine(g, description, xOffset, 100, PunchPanel.WIDTH - xOffset * 2);
 		}
 		else {
 			String description = "A save file has been detected, would you like to load it to keep playing?";
 			int xOffset = 100;
 			g.setColor(Color.WHITE);
-			g.setFont(FontLoader.mono40);
-			Renderer.renderTextMultiLine(g, description, xOffset, 100, PunchPanel.WIDTH - xOffset * 2);
 			g.setFont(FontLoader.mono30);
+			Renderer.renderTextMultiLine(g, description, xOffset, 100, PunchPanel.WIDTH - xOffset * 2);
 			final int textPos = 300;
 			final int rowSize = 40;
 			Renderer.renderTextShadow(g, "1. Load save file. ", PunchPanel.WIDTH >> 1, textPos, true);
