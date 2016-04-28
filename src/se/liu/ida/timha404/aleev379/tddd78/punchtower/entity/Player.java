@@ -6,7 +6,9 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveFile;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
@@ -33,15 +35,22 @@ public class Player extends Entity{
 	private int xp;
 
 
-	public Player(PlayerType type, final int initiative, final int attack, final int defense) {
+	private Player(PlayerType type, final int initiative, final int attack, final int defense,boolean equip)
+	{
 		super(new Stats(type.name, initiative, attack, defense), STANDARD_HP);
 		playerType = type;
 		lastLevel = 1;
 		level = 1;
 		xp = 0;
-		for (int i = 0; i < equipped.length; i++) {
-			equip(new Item(ItemType.values()[i], BASIC_GEAR_STAT, BASIC_GEAR_STAT, BASIC_GEAR_STAT, Rarity.NORMAL), i); // Magic numbers for starter item stats
+		if(equip) {
+			for (int i = 0; i < equipped.length; i++) {
+				equip(new Item(ItemType.values()[i], BASIC_GEAR_STAT, BASIC_GEAR_STAT, BASIC_GEAR_STAT, Rarity.NORMAL), i); // Magic numbers for starter item stats
+			}
 		}
+	}
+
+	public Player(PlayerType type, final int initiative, final int attack, final int defense) {
+		this(type,initiative,attack,defense,true);
 	}
 
 	public Item getItem(final int itemIndex) {
@@ -125,6 +134,11 @@ public class Player extends Entity{
 		assert(lastLevel == level) : "lastLevel can't be different from level: " + lastLevel + " "+level;
 		Monster monster = ((StateTower) GamestateHandler.getInstance().getCurrentGamestate()).getMonster();
 		xp += monster.stats.getTotal();
+		calcLevel();
+	}
+
+	private void calcLevel()
+	{
 		while(xp > Experience.getXp(level + 1))
 		{
 			level++;
@@ -153,5 +167,42 @@ public class Player extends Entity{
 	public PlayerType getPlayerType()
 	{
 		return playerType;
+	}
+
+	public SaveFile saveToFile(SaveFile file)
+	{
+		file.addTag("playerType", Integer.toString(playerType.ordinal()));
+		file.addTag("xp",Integer.toString(xp));
+		file.addTag("playerIni",Integer.toString(stats.initiative));
+		file.addTag("playerAtk",Integer.toString(stats.attack));
+		file.addTag("playerDef",Integer.toString(stats.defense));
+		for (int i = 0; i < equipped.length; i++)
+		{
+			file.addTag("itemIni"+i,Integer.toString(equipped[i].getStats().initiative));
+			file.addTag("itemAtk"+i,Integer.toString(equipped[i].getStats().attack));
+			file.addTag("itemDef"+i,Integer.toString(equipped[i].getStats().defense));
+			file.addTag("itemRarity"+i,Integer.toString(equipped[i].getRarity().ordinal()));
+		}
+		return file;
+	}
+
+	public static Player loadFromFile(SaveFile file) throws TagException
+	{
+		int ini = file.getTagAsInt("playerIni");
+		int atk = file.getTagAsInt("playerAtk");
+		int def = file.getTagAsInt("playerDef");
+		PlayerType type = PlayerType.values()[file.getTagAsInt("playerType")];
+		Player player = new Player(type,ini,atk,def,false);
+		player.xp = file.getTagAsInt("xp");
+		player.calcLevel();
+		player.lastLevel = player.level;
+		for (int i = 0; i < player.equipped.length; i++) {
+			int iniItem = file.getTagAsInt("itemIni"+i);
+			int atkItem = file.getTagAsInt("itemAtk"+i);
+			int defItem = file.getTagAsInt("itemDef"+i);
+			int rarityOrdinal = file.getTagAsInt("itemRarity"+i);
+			player.equipped[i] = new Item(ItemType.values()[i],iniItem,atkItem,defItem,Rarity.values()[rarityOrdinal]);
+		}
+		return player;
 	}
 }

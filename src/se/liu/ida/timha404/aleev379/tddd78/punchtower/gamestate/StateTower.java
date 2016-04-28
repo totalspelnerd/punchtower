@@ -3,15 +3,17 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveFile;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveLoad;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
@@ -51,9 +53,6 @@ public class StateTower extends Gamestate{
 	 */
 	public static final int STD_DEF = 50;
 
-	private Item item = null;
-	private int floor;
-
 	/**
 	 * Timer time for the attackdata to disapear (in seconds)
 	 */
@@ -77,29 +76,38 @@ public class StateTower extends Gamestate{
 	/**
 	 * Random used inside of StateTower
 	 */
-	private Random rnd = new Random();
+	private static Random rnd = new Random();
 
 	private Player player = null;
+	private Item item = null;
+	private int floor;
 	private Monster monster = null;
 	private boolean floorClear = false;
 	private boolean newGame = false;
 
 	private List<AttackData> attackData = new ArrayList<AttackData>();
 	private List<Float> attackTimer = new ArrayList<Float>();
-	
+
 	//private int attackType = 0;
+
+	private StateTower(Player player, int floor)
+	{
+		this.player = player;
+		this.floor = floor;
+	}
 
     public StateTower(PlayerType type) {
 		player = new Player(type, STD_INI, STD_ATK, STD_DEF);
+		floor = 1;
 	}
 
 	public void init() {
-		floor = 1;
 		item = Item.generateRandomItem(floor);
 		monster = Monster.generateMonster(floor);
 
 
 		PunchPanel temp = PunchTower.getInstance().getFrame().getPanel();
+
 		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("E"),"equipItem");
 		temp.getActionMap().put("equipItem", new AbstractAction()
 		{
@@ -188,25 +196,21 @@ public class StateTower extends Gamestate{
 	}
 
 	public void nextFloor() {
-		/*Stats curStats = player.getItem(ItemType.valueOf(item.getItemType().toString()).ordinal()).getStats();
-		int totalCurStats = curStats.initiative + curStats.attack + curStats.defense;
-		Stats newStats = item.getStats();
-		int totalNewStats = newStats.initiative + newStats.attack + newStats.defense;
-
-		if (totalNewStats >totalCurStats )
-			player.equip(item, ItemType.valueOf(item.getItemType().toString()).ordinal());
-		*/
 		newGame = false;
 		floor++;
 		monster = Monster.generateMonster(floor);
 		player.setHp(Entity.STANDARD_HP);
 		item = Item.generateRandomItem(floor);
 		floorClear = false;
+		SaveLoad.save(this);
 	}
 
 	public void startOver() {
 		removeKeystrokes();
 		GamestateHandler.getInstance().setGamestate(new StateMenu());
+		if(!new File(SaveLoad.SAVE_FILE).delete())
+			JOptionPane.showMessageDialog(null,"Save file could not be deleted.\nGuess you can keep the save...","Delete failed",JOptionPane.ERROR_MESSAGE);
+
 	}
 
 	public Player getPlayer() {
@@ -405,6 +409,20 @@ public class StateTower extends Gamestate{
 		panel.getActionMap().remove("quickAttack");
 		panel.getActionMap().remove("normalAttack");
 		panel.getActionMap().remove("heavyAttack");
+	}
+
+	public SaveFile saveToFile(SaveFile file)
+	{
+		file.addTag("floor",Integer.toString(floor));
+		player.saveToFile(file);
+		return file;
+	}
+
+	public static StateTower loadFromFile(SaveFile file) throws TagException
+	{
+		int floor = file.getTagAsInt("floor");
+		StateTower tower = new StateTower(Player.loadFromFile(file), floor);
+		return tower;
 	}
 
 }

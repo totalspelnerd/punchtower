@@ -2,9 +2,11 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateSaveFile;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 /**
  * The meat of the game. Here is where the main gameloop is and where the game starts to run (main method). This class handles
@@ -43,26 +45,10 @@ public final class PunchTower
 	 */
 	private int ups = 0;
 
-	private PunchFrame frame;// = new PunchFrame();
+	private PunchFrame frame = null;
 
 
 	private int frames = 0;
-
-	/**
-	 * Private since this should never be created anywhere else.<br> We will never have more than one instance of the game
-	 * running on one process (at the same time).
-	 */
-	private PunchTower()
-	{
-		frame = new PunchFrame();
-		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
-		frame.getPanel().getActionMap().put("exit", new AbstractAction()
-		{
-			@Override public void actionPerformed(final ActionEvent e) {
-				closeGameLoop();
-			}
-		});
-	}
 
 	/**
 	 * This method is called to run the gameloop. It is not threaded so it will take up the whole thread and run forever.
@@ -80,8 +66,18 @@ public final class PunchTower
 		int updates = 0;
 
 		Timer timer = new Timer();
-
-		GamestateHandler.getInstance().setGamestate(new StateMenu());
+		frame = new PunchFrame();
+		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
+		frame.getPanel().getActionMap().put("exit", new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				closeGameLoop();
+			}
+		});
+		if(new File(SaveLoad.SAVE_FILE).exists())
+			GamestateHandler.getInstance().setGamestate(new StateSaveFile());
+		else
+			GamestateHandler.getInstance().setGamestate(new StateMenu());
 
 		while (running) {
 			float deltaTime = timer.timeElapsed();
@@ -114,6 +110,7 @@ public final class PunchTower
 				// and to not overuse the CPU when it is not needed.
 			}
 		}
+		frame.dispose();
 	}
 
 	/**

@@ -42,6 +42,11 @@ public class Item{
 		return itemType;
 	}
 
+	public Rarity getRarity()
+	{
+		return rarity;
+	}
+
 	/**
 	 * This method is used to generate a new Item based on the current drop rates and the current floor.
 	 * @param floor The current floor of the tower
