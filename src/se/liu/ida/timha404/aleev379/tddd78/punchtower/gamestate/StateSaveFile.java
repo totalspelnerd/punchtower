@@ -35,7 +35,7 @@ public class StateSaveFile extends Gamestate
 						GamestateHandler.getInstance().pushGamestate(SaveLoad.load("save.dat"));
 						removeKeystrokes();
 					} catch (LoadFailedException|TagException e1) {
-						PunchLogger.LOGGER.severe("Could not load save file. " + SaveLoad.SAVE_FILE);
+						PunchLogger.LOGGER.severe("Could not load save file.\n"+e1.getMessage());
 						loadFail = true;
 					}
 				}

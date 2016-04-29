@@ -4,6 +4,7 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Item;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchLogger;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
@@ -16,12 +17,12 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.SaveFailedException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +33,10 @@ import java.util.Random;
 public class StateTower extends Gamestate
 {
 
+
+	private static final int HELL_FLOOR_1 = 66;
+	private static final int HELL_FLOOR_2 = 666;
+	private static final int FLOOR50 = 50;
 
 	/**
 	 * Number of tutorial floors.
@@ -192,7 +197,13 @@ public class StateTower extends Gamestate
 		player.setHp(Entity.STANDARD_HP);
 		item = Item.generateRandomItem(floor);
 		floorClear = false;
-		SaveLoad.save(this,SaveLoad.SAVE_FILE);
+		try {
+			SaveLoad.save(this, SaveLoad.SAVE_FILE);
+		}
+		catch(SaveFailedException e)
+		{
+			PunchLogger.LOGGER.severe("Saving could not be completed. " + e.getMessage());
+		}
 	}
 
 	public void startOver() {
@@ -265,9 +276,9 @@ public class StateTower extends Gamestate
 
 	@Override public void render(final Graphics g)
 	{
-		if (floor == 66 || floor == 666) { // Magic number for Constants for easter egg backgrounds
+		if (floor == HELL_FLOOR_1 || floor == HELL_FLOOR_2) {
 			g.drawImage(ImageLoader.backgroundHell, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
-		} else if (floor > 50) { // Magic number above floor 50 the background changes
+		} else if (floor > FLOOR50) {
 			g.drawImage(ImageLoader.background50, 0, 0, PunchPanel.WIDTH, PunchPanel.HEIGHT, null);
 
 		} else {

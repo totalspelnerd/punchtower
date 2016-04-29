@@ -31,7 +31,7 @@ public class Timer
      */
     public void resetTime()
     {
-	currentTime = System.nanoTime();
+		currentTime = System.nanoTime();
     }
 
     /**
@@ -39,8 +39,8 @@ public class Timer
      */
     public float timeElapsed()
     {
-	long lastTime = currentTime;
-	resetTime();
-	return (float)(currentTime - lastTime) / NANO_SECOND;
+		long lastTime = currentTime;
+		resetTime();
+		return (float)(currentTime - lastTime) / NANO_SECOND;
     }
 }

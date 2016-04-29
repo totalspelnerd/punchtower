@@ -6,7 +6,6 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.Gamestate;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
-import javax.swing.*;
 import java.io.File;
 
 /**
@@ -22,27 +21,15 @@ public final class SaveLoad
 
 	private SaveLoad(){}
 
-	public static void save(StateTower tower, String filename)
+	public static void save(StateTower tower, String filename) throws SaveFailedException
 	{
 		SaveFile save = new SaveFile(filename);
 		tower.saveToFile(save);
-		try
-		{
-			save.saveToFile();
-		}
-		catch(SaveFailedException e)
-		{
-			e.printStackTrace();
-			PunchLogger.LOGGER.severe("Saving could not be completed.");
-		}
+		save.saveToFile();
 	}
 
 	public static Gamestate load(String filename) throws LoadFailedException, TagException
 	{
-		if(!new File(filename).exists()) {
-			PunchLogger.LOGGER.warning("The given save file could not be found. " + filename);
-			throw new LoadFailedException(filename);
-		}
 		SaveFile file = new SaveFile(filename);
 		file.load();
 		return StateTower.loadFromFile(file);

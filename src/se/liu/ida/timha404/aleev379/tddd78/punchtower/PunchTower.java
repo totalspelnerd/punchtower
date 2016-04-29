@@ -1,14 +1,14 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
 
-
-import java.awt.event.*;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateSaveFile;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,6 +19,7 @@ import java.io.IOException;
 
 public final class PunchTower
 {
+
 	/**
 	 * Frame cap of the game.
 	 */

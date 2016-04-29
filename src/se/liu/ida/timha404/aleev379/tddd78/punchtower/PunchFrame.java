@@ -20,16 +20,16 @@ public class PunchFrame extends JFrame
      */
     public PunchFrame()
     {
-	panel = new PunchPanel();
-	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	setTitle("PunchTower");
-	setContentPane(panel);
-	setFocusable(true);
+		panel = new PunchPanel();
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setTitle("PunchTower");
+		setContentPane(panel);
+		setFocusable(true);
 
-	// Sometimes the panel won't resize correctly on pack so we will run it until it does it correctly.
-	while(panel.wrongSize())
-	    pack();
-	setVisible(true);
+		// Sometimes the panel won't resize correctly on pack so we will run it until it does it correctly.
+		while(panel.wrongSize())
+			pack();
+		setVisible(true);
     }
 
 	public PunchPanel getPanel() {

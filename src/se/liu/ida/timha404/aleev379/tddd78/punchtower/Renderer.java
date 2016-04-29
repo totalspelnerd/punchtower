@@ -11,12 +11,16 @@ import java.awt.Color;
 public final class Renderer
 {
 
+	private static final double FONT_LINE_RATIO = 5.0/4.0;
+	private static final int ALPHA_VALUE = 125;
+
+
 	private Renderer() {}
 
 	public static void renderNumberDrop(Graphics g, float timeElapsed, int x, int y, float vx, float vy, float gravity,String text, Color color)
 	{
 		float xPos = x + vx*timeElapsed;
-		float yPos = y + vy*timeElapsed + gravity*timeElapsed*timeElapsed/2.0f; // Formula for movement in y direction with speed and gravity.
+		float yPos = y + vy*timeElapsed + gravity*timeElapsed*timeElapsed/2;
 		g.setColor(color);
 		renderTextShadow(g, text, (int)xPos, (int)yPos, true);
 	}
@@ -32,7 +36,7 @@ public final class Renderer
 		}
 		if(background)
 		{
-			g.setColor(new Color(0,0,0,125)); // Alpha color of 125
+			g.setColor(new Color(0,0,0,ALPHA_VALUE)); // Alpha color of 125
 			g.fillRect(x-5,y-g.getFont().getSize(),g.getFontMetrics().stringWidth(text)+10,g.getFont().getSize()+10);
 		}
 		g.setColor(c.darker().darker().darker().darker());
@@ -76,12 +80,12 @@ public final class Renderer
 		if(background)
 		{
 			Color c = g.getColor();
-			g.setColor(new Color(0,0,0,125)); // Alpha color of 125
-			g.fillRect(x-5,y,longestLine+10,(int)(complete.size() * g.getFont().getSize() * 5.0 / 4.0)+10);// The division 5.0/4.0 is to get a margin between lines of text
+			g.setColor(new Color(0,0,0,ALPHA_VALUE)); // Alpha color of 125
+			g.fillRect(x-5,y,longestLine+10,(int)(complete.size() * g.getFont().getSize() * FONT_LINE_RATIO)+10);// The division 5.0/4.0 is to get a margin between lines of text
 			g.setColor(c);
 		}
 		for (int i = 0; i < complete.size(); i++) {
-			renderTextShadow(g, complete.get(i), x, (int) (y + g.getFont().getSize()+ i * g.getFont().getSize() * 5.0 / 4.0), false); // The division 5.0/4.0 is to get a margin between lines of text
+			renderTextShadow(g, complete.get(i), x, (int) (y + g.getFont().getSize()+ i * g.getFont().getSize() * FONT_LINE_RATIO), false); // The division 5.0/4.0 is to get a margin between lines of text
 		}
 	}
 

@@ -11,6 +11,10 @@ import java.io.IOException;
  */
 public final class ImageLoader{
 
+	private static final int ERROR_IMAGE_BACKGROUND = 0xff00ff;
+	private static final int ERROR_IMAGE_WIDTH = 13;
+	private static final int ERROR_IMAGE_HEIGHT = 7;
+
 	/**
 	 * Background images of our game. No need to load more than once
 	 */
@@ -43,7 +47,7 @@ public final class ImageLoader{
 	private ImageLoader(){}
 
 	static {
-		monster = read("res/ogre.png");
+		monster = read("res/ogre13123.png");
 		player = read("res/player.png");
 		background = read("res/background.jpg");
 		background50 = read("res/background50.png");
@@ -53,19 +57,23 @@ public final class ImageLoader{
 
 	private static Image getErrorImage()
 	{
+
 		boolean[] errorImage = new boolean[]{
-			true ,true ,true ,false,true ,true ,false,false,true ,true ,false,
-			true ,false,false,false,true ,false,true ,false,true ,false,true ,
-			true ,true ,false,false,true ,true ,false,false,true ,true ,false,
-			true ,false,false,false,true ,false,true ,false,true ,false,true ,
-			true ,true ,true ,false,true ,false,true ,false,true ,false,true };
-		BufferedImage image = new BufferedImage(11,5,BufferedImage.TYPE_INT_RGB); // Size of image with the booleans above.
+			false,false,false,false,false,false,false,false,false,false,false,false,false,
+			false,true ,true ,true ,false,true ,true ,false,false,true ,true ,false,false,
+			false,true ,false,false,false,true ,false,true ,false,true ,false,true ,false,
+			false,true ,true ,false,false,true ,true ,false,false,true ,true ,false,false,
+			false,true ,false,false,false,true ,false,true ,false,true ,false,true ,false,
+			false,true ,true ,true ,false,true ,false,true ,false,true ,false,true,false,
+			false,false,false,false,false,false,false,false,false,false,false,false,false};
+
+		BufferedImage image = new BufferedImage(ERROR_IMAGE_WIDTH,ERROR_IMAGE_HEIGHT,BufferedImage.TYPE_INT_RGB); // Size of image with the booleans above.
 		for (int y = 0; y < image.getHeight(); y++) {
 			for (int x = 0; x < image.getWidth(); x++) {
 				if(errorImage[x+y*image.getWidth()])
 					image.setRGB(x,y,0x000000);
 				else
-					image.setRGB(x,y,0xff00ff); // PURPLE PINK COLOR
+					image.setRGB(x,y,ERROR_IMAGE_BACKGROUND);
 			}
 		}
 		return image;
@@ -78,7 +86,7 @@ public final class ImageLoader{
 			return image;
 		} catch (IOException e) {
 			e.printStackTrace();
-			PunchLogger.LOGGER.warning("Could not load image file: " + file);
+			PunchLogger.LOGGER.warning("Could not load image file: " + System.getProperty("user.dir")+"/"+file);
 			return getErrorImage();
 		}
 	}

@@ -36,16 +36,17 @@ public class Stats
 	 * Initiative value
 	 */
 	public int initiative;
+
 	/**
 	 * Defense value
 	 */
-
 	public int defense;
 
 	/**
 	 * Attack value
 	 */
 	public int attack;
+
 
 	/**
 	 * Width of the stats panel
@@ -76,6 +77,7 @@ public class Stats
 		this.initiative -= stat.initiative;
 		this.defense -= stat.defense;
 		this.attack -= stat.attack;
+		updateSize();
 	}
 
 	public void increase(Stats stat) {
@@ -132,6 +134,8 @@ public class Stats
 	 */
 	public void render(Graphics g, int x, int y, Color borderColor)
 	{
+
+
 		// Draw the border.
 		g.setColor(borderColor);
 		g.fillRect(x, y, width, height);

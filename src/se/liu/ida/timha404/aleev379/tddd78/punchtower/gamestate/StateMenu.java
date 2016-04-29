@@ -16,6 +16,17 @@ import java.awt.event.ActionEvent;
  */
 public class StateMenu extends Gamestate {
 
+	private final static int STAN_X =150;
+	private final static int BRICK_X =515;
+	private final static int TED_X = 830;
+
+	private final static int STAN_WIDTH =320;
+	private final static int BRICK_WIDTH =270;
+	private final static int TED_WIDTH = 290;
+
+	private final static int CHARACTER_Y =500;
+
+
 	@Override
 	public void init() {
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
@@ -69,13 +80,13 @@ public class StateMenu extends Gamestate {
 		g.setFont(FontLoader.mono20);
 
 		g.setColor(Color.YELLOW);
-		Renderer.renderTextMultiLine(g, "1. " + PlayerType.STAN.name+"\n"+iniGuy, 150, 500, 320); // Magic numbers to position speedy stan information
+		Renderer.renderTextMultiLine(g, "1. " + PlayerType.STAN.name+"\n"+iniGuy, STAN_X, CHARACTER_Y, STAN_WIDTH);
 
 		g.setColor(Color.RED);
-		Renderer.renderTextMultiLine(g,"2. " + PlayerType.BRICK.name+"\n" + atkGuy, 515, 500, 270); // Magic numbers to position brutal brick information
+		Renderer.renderTextMultiLine(g,"2. " + PlayerType.BRICK.name+"\n" + atkGuy, BRICK_X, CHARACTER_Y, BRICK_WIDTH);
 
 		g.setColor(Color.CYAN);
-		Renderer.renderTextMultiLine(g,"3. " + PlayerType.TED.name+"\n" +  defGuy, 800, 500, 290); // Magic numbers to position tanky ted information
+		Renderer.renderTextMultiLine(g,"3. " + PlayerType.TED.name+"\n" +  defGuy, TED_X, CHARACTER_Y, TED_WIDTH);
 
 	}
 

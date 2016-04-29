@@ -18,6 +18,11 @@ public final class Combat {
 	 */
 	private static final Random RANDOM = new Random();
 
+	private static final double STAN_NERF_TUTORIAL = 0.5;
+	private static final double CRIT_MIN = 1.7;
+	private static final double CRIT_DIFF = 0.5;
+	private static final double TUTORIAL_FLOOR_MODIFIER = 0.25;
+
 	private Combat(){}
 
 	public static AttackData attack(final Entity attacker, final Entity defender, final AttackType attackType) {
@@ -32,25 +37,24 @@ public final class Combat {
 		assert(!attacker.equals(defender)) : "Attacker can't attack himself.";
 		double damage = (int) (attacker.getStats().attack* (1-(defender.getStats().defense / (float) (defender.getStats().defense + 100)))*typeMod);
 		StateTower tower = (StateTower)GamestateHandler.getInstance().getCurrentGamestate();
-		if (attacker instanceof Player && tower.getFloor() < StateTower.TUTORIAL_FLOOR) { // Magic number represents the number of tutorial floors.
-			int damageMult =(int)  ((StateTower.TUTORIAL_FLOOR - tower.getFloor())*0.25 + 1); // Magic numbers used to make the game easier in the beginning.
-			if (((Player)attacker).getPlayerType() == PlayerType.STAN) {
-				damageMult += 0.5; // Magic number represents a damage modifier to make other characters other than speedy stan playable.
+		if (attacker instanceof Player && tower.getFloor() < StateTower.TUTORIAL_FLOOR) {
+			int damageMult =(int)  ((StateTower.TUTORIAL_FLOOR - tower.getFloor())*TUTORIAL_FLOOR_MODIFIER + 1);
+			if (((Player)attacker).getPlayerType() != PlayerType.STAN) {
+				damageMult += STAN_NERF_TUTORIAL;
 			}
 			damage *= damageMult;
 		}
 		if (crit) {
-			damage *= (RANDOM.nextDouble()*0.5+1.7); // These magic numbers are used to set the critical hit modifier. number between 1.7-2.2
+			damage *= (RANDOM.nextDouble()*CRIT_DIFF+CRIT_MIN);
 		}
 		if (!hit) damage=0;
 		boolean kill = (damage >= defender.hp);
+		AttackData data = new AttackData(attacker, defender, hit, crit, kill, (int)damage);
 		defender.hp -= (int)damage;
 		defender.hp = defender.hp < 0 ? 0 : defender.hp;
-		AttackData data = new AttackData(attacker, defender, hit, crit, kill, (int)damage);
 
 
 		assert(damage >= 0) : "Attacker should always do damage defender.";
-		assert(hit || damage <= 0) : "Attacker should always do damage defender.";
 
 		return data;
 	}

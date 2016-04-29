@@ -8,6 +8,8 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
  */
 public final class Experience {
 
+	private static final double LEVEL_MULTIPLIER = 1.0/7.0;
+
 	private Experience(){}
 
 	public static int getXp(int level)
@@ -24,6 +26,6 @@ public final class Experience {
 	
 	private static int getXpDiff(int level)
 	{
-		return (int)(1000*Math.pow(2, level/7.0)); // 7.0 is a magic number to scale the xp into a certain function.
+		return (int)(1000*Math.pow(2, level*LEVEL_MULTIPLIER)); // 7.0 is a magic number to scale the xp into a certain function.
 	}
 }

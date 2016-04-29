@@ -4,7 +4,7 @@ import java.awt.Font;
 
 /**
  * Loads all our fonts needed in the game.<br/>
- * don't need to not recreate fonts everywhere or create them inside of drawcalls.
+ * Don't need to not recreate fonts everywhere or create them inside of drawcalls.
  */
 public final class FontLoader {
 	private FontLoader(){}
@@ -13,6 +13,7 @@ public final class FontLoader {
 	 * MONOSPACE font with size 20
 	 */
 	public static Font mono20 = new Font(Font.MONOSPACED, Font.PLAIN, 20); // size of font
+
 	/**
 	 * MONOSPACE font with size 30
 	 */

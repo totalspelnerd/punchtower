@@ -31,7 +31,7 @@ public final class PunchLogger
 		}
 
 
-		LOGGER.setLevel(Level.WARNING);
+		LOGGER.setLevel(Level.INFO);
 		FileHandler file = new FileHandler("Logging.txt");
 
 		SimpleFormatter formatter = new SimpleFormatter();

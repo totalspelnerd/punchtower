@@ -28,6 +28,7 @@ public class Player extends Entity{
 	private PlayerType playerType;
 
 	private static final int BASIC_GEAR_STAT = 25;
+	private static final int COLOR_STATS_BORDER = 0x00bb00;
 
 	private Item[] equipped = new Item[]{null,null,null,null,null,null};
 	private int lastLevel;
@@ -72,7 +73,7 @@ public class Player extends Entity{
 		this.equipped[itemIndex] = item;
 		stats.increase(equipped[itemIndex].getStats());
 
-		// All the following Magic numbers in this method is used to adjust the balance of the game. Testsed to make them good.
+		// All the following Magic numbers in this method is used to adjust the balance of the game. Tested to make them good.
 		switch (playerType) {
 			case STAN:
 				if (temp.initiative < stats.initiative) {
@@ -81,13 +82,11 @@ public class Player extends Entity{
 				break;
 			case BRICK:
 				if (temp.attack < stats.attack) {
-					//stats.defense -= (25);
 					stats.attack += (int) Math.min(30, temp.attack*0.05f);
 				}
 				break;
 			case TED:
 				if (temp.defense < stats.defense) {
-					//stats.attack -= (25);
 					stats.defense += (int) Math.min(50, temp.defense*0.1f);
 				}
 				break;
@@ -107,15 +106,16 @@ public class Player extends Entity{
 	
 	public void spec(StatType stat)
 	{
+		final double levelDivisor = 8.0;
 		switch (stat) { // Magic numbers to maintain balance
 			case INITIATIVE:
-				stats.initiative += (int) (10*Math.pow(2, lastLevel/8.0));
+				stats.initiative += (int) (10*Math.pow(2, lastLevel/levelDivisor));
 				break;
 			case ATTACK:
-				stats.attack += (int) (10*Math.pow(2, lastLevel/8.0));
+				stats.attack += (int) (10*Math.pow(2, lastLevel/levelDivisor));
 				break;
 			case DEFENSE:
-				stats.defense += (int) (10*Math.pow(2, lastLevel/8.0));
+				stats.defense += (int) (10*Math.pow(2, lastLevel/levelDivisor));
 				break;
 		}
 		lastLevel++;
@@ -148,7 +148,7 @@ public class Player extends Entity{
 
 	public void render(Graphics g, int x, int y)
 	{
-		stats.render(g,x,y,new Color(0x00bb00)); // magic number is a little dark green color (Better looking than Color.GREEN.darker())
+		stats.render(g,x,y,new Color(COLOR_STATS_BORDER)); // magic number is a little dark green color (Better looking than Color.GREEN.darker())
 		final int playerYOffset = 200;
 		final int playerWidth = 200;
 		final int playerHeight = 400;

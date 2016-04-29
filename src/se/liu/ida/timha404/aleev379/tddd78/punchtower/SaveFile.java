@@ -4,7 +4,6 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.LoadFailedExcep
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.SaveFailedException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -72,7 +71,8 @@ public class SaveFile
 	public void load() throws LoadFailedException
 	{
 		File file = new File(filename);
-		if (!file.exists()) throw new LoadFailedException(filename);
+		if (!file.exists())
+			throw new LoadFailedException(filename);
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line;
 			while ((line = br.readLine()) != null) // This is the standard way to create a file reader
