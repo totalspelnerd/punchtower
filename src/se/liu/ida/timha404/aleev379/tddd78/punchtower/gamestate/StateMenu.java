@@ -2,10 +2,10 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,6 +76,7 @@ public class StateMenu extends Gamestate {
 
 		g.setColor(Color.CYAN);
 		Renderer.renderTextMultiLine(g,"3. " + PlayerType.TED.name+"\n" +  defGuy, 800, 500, 290); // Magic numbers to position tanky ted information
+
 	}
 
 	private void removeKeystrokes()

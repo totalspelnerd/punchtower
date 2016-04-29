@@ -1,5 +1,8 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+
+
+import java.awt.event.*;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateMenu;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateSaveFile;
@@ -7,6 +10,7 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateSaveFile;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * The meat of the game. Here is where the main gameloop is and where the game starts to run (main method). This class handles
@@ -50,6 +54,16 @@ public final class PunchTower
 
 	private int frames = 0;
 
+	private PunchTower()
+	{
+		try {
+			PunchLogger.setup();
+		} catch (IOException e) {
+			e.printStackTrace();
+			// Logger could not be set up.
+		}
+	}
+
 	/**
 	 * This method is called to run the gameloop. It is not threaded so it will take up the whole thread and run forever.
 	 */
@@ -67,7 +81,7 @@ public final class PunchTower
 
 		Timer timer = new Timer();
 		frame = new PunchFrame();
-		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
+		frame.getPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK), "exit");
 		frame.getPanel().getActionMap().put("exit", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
@@ -106,9 +120,7 @@ public final class PunchTower
 				Thread.sleep(1); // Needed to not "overheat" the CPU. We dont need to render more than 1000fps at any point anyways.
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				// Doesn't matter if this happens
-				// Since this is more to controll the fps to a more exact time
-				// and to not overuse the CPU when it is not needed.
+				PunchLogger.LOGGER.warning("Thread could not sleep. Due to interuption fault.");
 			}
 		}
 		frame.dispose();

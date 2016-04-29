@@ -33,14 +33,16 @@ public final class SaveLoad
 		catch(SaveFailedException e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,e.getStackTrace(),e.getMessage(), JOptionPane.ERROR_MESSAGE);
+			PunchLogger.LOGGER.severe("Saving could not be completed.");
 		}
 	}
 
 	public static Gamestate load(String filename) throws LoadFailedException, TagException
 	{
-		if(!new File(filename).exists())
+		if(!new File(filename).exists()) {
+			PunchLogger.LOGGER.warning("The given save file could not be found. " + filename);
 			throw new LoadFailedException(filename);
+		}
 		SaveFile file = new SaveFile(filename);
 		file.load();
 		return StateTower.loadFromFile(file);
@@ -48,8 +50,9 @@ public final class SaveLoad
 
 	public static void delete(String filename)
 	{
-		if (!new File(filename).delete()) JOptionPane
-			.showMessageDialog(null, "Save file could not be deleted.\nGuess you can keep the save...", "Delete failed",
-							   JOptionPane.ERROR_MESSAGE);
+		File file = new File(filename);
+		if(file.exists())
+			if (!file.delete())
+				PunchLogger.LOGGER.severe("Could not delete file. Is the game in a restricted folder? Run Admin.");
 	}
 }

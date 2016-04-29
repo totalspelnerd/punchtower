@@ -2,6 +2,7 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate;
 
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.FontLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchLogger;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.LoadFailedException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
@@ -34,7 +35,7 @@ public class StateSaveFile extends Gamestate
 						GamestateHandler.getInstance().pushGamestate(SaveLoad.load("save.dat"));
 						removeKeystrokes();
 					} catch (LoadFailedException|TagException e1) {
-						// We dont need to use e1 for anything since we are handling the problem in another way.
+						PunchLogger.LOGGER.severe("Could not load save file. " + SaveLoad.SAVE_FILE);
 						loadFail = true;
 					}
 				}

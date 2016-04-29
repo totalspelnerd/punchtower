@@ -4,7 +4,7 @@ import java.awt.Font;
 
 /**
  * Loads all our fonts needed in the game.<br/>
- * Needed to not recreate fonts everywhere or create them inside of drawcalls.
+ * don't need to not recreate fonts everywhere or create them inside of drawcalls.
  */
 public final class FontLoader {
 	private FontLoader(){}

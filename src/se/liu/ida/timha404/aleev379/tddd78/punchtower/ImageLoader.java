@@ -78,6 +78,7 @@ public final class ImageLoader{
 			return image;
 		} catch (IOException e) {
 			e.printStackTrace();
+			PunchLogger.LOGGER.warning("Could not load image file: " + file);
 			return getErrorImage();
 		}
 	}

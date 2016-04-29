@@ -46,7 +46,11 @@ public final class Combat {
 		boolean kill = (damage >= defender.hp);
 		defender.hp -= (int)damage;
 		defender.hp = defender.hp < 0 ? 0 : defender.hp;
-		AttackData data =new AttackData(attacker, defender, hit, crit, kill, (int)damage);
+		AttackData data = new AttackData(attacker, defender, hit, crit, kill, (int)damage);
+
+
+		assert(damage >= 0) : "Attacker should always do damage defender.";
+		assert(hit || damage <= 0) : "Attacker should always do damage defender.";
 
 		return data;
 	}

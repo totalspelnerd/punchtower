@@ -92,6 +92,8 @@ public class Item{
 				case DEFENSE:
 					def *=(int) rarity.modifier;
 					break;
+				default:
+					assert(false) : "A new stat has been added but is not accounted for.";
 			}
 		}
 
