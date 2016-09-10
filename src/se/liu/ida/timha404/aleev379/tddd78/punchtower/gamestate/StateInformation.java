@@ -24,13 +24,13 @@ public class StateInformation extends Gamestate
 	{
 		this.playerType = playerType;
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "next");
-		panel.getActionMap().put("next", new AbstractAction()
+		panel.addInput("SPACE", "next", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				state++;
 				if(state == 3)
 				{
+					panel.removeInput("SPACE","next");
 					panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
 					panel.getActionMap().remove("next");
 					GamestateHandler.getInstance().pushGamestate(new StateTower(StateInformation.this.playerType));

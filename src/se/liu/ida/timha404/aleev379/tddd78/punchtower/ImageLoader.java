@@ -1,10 +1,11 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
 
 /**
  * This class loads all of the needed images in our game.
@@ -18,41 +19,41 @@ public final class ImageLoader{
 	/**
 	 * Background images of our game. No need to load more than once
 	 */
-	public static Image background = null;
+	public static final Image background;
 
 	/**
 	 * Background images of our game. No need to load more than once
 	 */
-	public static Image background50 = null;
+	public static final Image background50;
 	/**
 	 * Background images of our game. No need to load more than once
 	 */
-	public static Image backgroundHell = null;
+	public static final Image backgroundHell;
 
 	/**
 	 * The image of the text when you die. No need to load more than one
 	 */
-	public static Image deadText = null;
+	public static final Image deadText;
 
 	/**
 	 * The image of monster. No need to load more than one
 	 */
-	public static Image monster = null;
+	public static final Image monster;
 
 	/**
 	 * The image of player. No need to load more than one
 	 */
-	public static Image player = null;
+	public static final Image player;
 
 	private ImageLoader(){}
 
 	static {
-		monster = read("res/ogre13123.png");
-		player = read("res/player.png");
-		background = read("res/background.jpg");
-		background50 = read("res/background50.png");
-		backgroundHell = read("res/backgroundHell.jpg");
-		deadText = read("res/dead.png");
+		monster = read("/res/ogre.png");
+		player = read("/res/player.png");
+		background = read("/res/background.jpg");
+		background50 = read("/res/background50.png");
+		backgroundHell = read("/res/backgroundHell.jpg");
+		deadText = read("/res/dead.png");
 	}
 
 	private static Image getErrorImage()
@@ -82,9 +83,10 @@ public final class ImageLoader{
 	private static Image read(String file)
 	{
 		try{
-			Image image = ImageIO.read(new File(file));
+			URL url = ImageLoader.class.getResource(file);
+			Image image = ImageIO.read(url);
 			return image;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			PunchLogger.LOGGER.warning("Could not load image file: " + System.getProperty("user.dir")+"/"+file);
 			return getErrorImage();

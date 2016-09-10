@@ -1,10 +1,13 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.Gamestate;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateInformation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Displays the current gamestate and updates it.
@@ -50,7 +53,7 @@ public class PunchPanel extends JPanel
      */
     public void update(float timeElapsed)
     {
-	GamestateHandler.getInstance().update(timeElapsed);
+    	GamestateHandler.getInstance().update(timeElapsed);
     }
     /**
      * Tick the gamestate.
@@ -73,6 +76,18 @@ public class PunchPanel extends JPanel
     public boolean wrongSize()
     {
 	return getWidth()!=WIDTH || getHeight()!=HEIGHT;
+    }
+    
+    public void addInput(String key, String name, AbstractAction action)
+    {
+    	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key),name);
+		getActionMap().put(name, action);
+    }
+    
+    public void removeInput(String key, String name)
+    {
+    	getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(KeyStroke.getKeyStroke(key));
+		getActionMap().remove(name);
     }
 
 }

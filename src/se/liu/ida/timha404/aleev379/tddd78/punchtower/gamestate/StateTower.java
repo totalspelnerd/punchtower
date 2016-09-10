@@ -110,10 +110,9 @@ public class StateTower extends Gamestate
 		monster = Monster.generateMonster(floor);
 
 
-		PunchPanel temp = PunchTower.getInstance().getFrame().getPanel();
+		PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
 
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("E"), "equipItem");
-		temp.getActionMap().put("equipItem", new AbstractAction()
+		panel.addInput("E","equipItem",new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (!player.didLevelUp()) {
@@ -124,8 +123,7 @@ public class StateTower extends Gamestate
 				}
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "skipEquip");
-		temp.getActionMap().put("skipEquip", new AbstractAction()
+		panel.addInput("SPACE","skipEquip",new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (!player.didLevelUp()) {
@@ -138,46 +136,43 @@ public class StateTower extends Gamestate
 				}
 			}
 		});
-
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "quickAttack");
-		temp.getActionMap().put("quickAttack", new AbstractAction()
+		
+		panel.addInput("1", "quickAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (!player.didLevelUp()) attackEvent(AttackType.QUICK);
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"), "normalAttack");
-		temp.getActionMap().put("normalAttack", new AbstractAction()
+		
+		panel.addInput("2", "normalAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (!player.didLevelUp()) attackEvent(AttackType.NORMAL);
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"), "heavyAttack");
-		temp.getActionMap().put("heavyAttack", new AbstractAction()
+		
+		panel.addInput("3", "headvyAttack", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (!player.didLevelUp()) attackEvent(AttackType.HEAVY);
 			}
 		});
-
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F1"), "specIni");
-		temp.getActionMap().put("specIni", new AbstractAction()
+		
+		panel.addInput("F1", "specIni", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (player.didLevelUp()) player.spec(StatType.INITIATIVE);
 			}
 		});
-
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F2"), "specAtk");
-		temp.getActionMap().put("specAtk", new AbstractAction()
+		
+		panel.addInput("F2", "specAtk", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (player.didLevelUp()) player.spec(StatType.ATTACK);
 			}
 		});
-		temp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F3"), "specDef");
-		temp.getActionMap().put("specDef", new AbstractAction()
+		
+		panel.addInput("F3", "specDef", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if (player.didLevelUp()) player.spec(StatType.DEFENSE);
@@ -400,16 +395,14 @@ public class StateTower extends Gamestate
 	private void removeKeystrokes()
 	{
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("E"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("3"));
-		panel.getActionMap().remove("equipItem");
-		panel.getActionMap().remove("skipEquip");
-		panel.getActionMap().remove("quickAttack");
-		panel.getActionMap().remove("normalAttack");
-		panel.getActionMap().remove("heavyAttack");
+		panel.removeInput("e","equipItem");
+		panel.removeInput("SPACE","skipEquip");
+		panel.removeInput("1","quickAttack");
+		panel.removeInput("2","normalAttack");
+		panel.removeInput("3","heavyAttack");
+		panel.removeInput("F1","specIni");
+		panel.removeInput("F2","specAtk");
+		panel.removeInput("F3","specDef");
 	}
 
 	public void saveToFile(SaveFile file)

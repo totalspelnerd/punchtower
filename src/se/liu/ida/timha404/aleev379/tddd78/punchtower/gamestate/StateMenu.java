@@ -30,31 +30,29 @@ public class StateMenu extends Gamestate {
 	@Override
 	public void init() {
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), PlayerType.STAN.name);
-		panel.getActionMap().put(PlayerType.STAN.name, new AbstractAction()
-				{
-					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.STAN));
-						removeKeystrokes();
-					}
-				});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),PlayerType.BRICK.name);
-		panel.getActionMap().put(PlayerType.BRICK.name, new AbstractAction()
-				{
-					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.BRICK));
-						removeKeystrokes();
-					}
-				});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("3"),PlayerType.TED.name);
-		panel.getActionMap().put(PlayerType.TED.name, new AbstractAction()
-				{
-					@Override public void actionPerformed(final ActionEvent e) {
-						GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.TED));
-						removeKeystrokes();
-					}
-				});
-
+		panel.addInput("1", PlayerType.STAN.name, new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.STAN));
+				removeKeystrokes();
+			}
+		});
+		
+		panel.addInput("2", PlayerType.BRICK.name, new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.BRICK));
+				removeKeystrokes();
+			}
+		});
+		
+		panel.addInput("3", PlayerType.TED.name, new AbstractAction()
+		{
+			@Override public void actionPerformed(final ActionEvent e) {
+				GamestateHandler.getInstance().pushGamestate(new StateInformation(PlayerType.TED));
+				removeKeystrokes();
+			}
+		});
 	}
 
 	@Override
@@ -93,12 +91,9 @@ public class StateMenu extends Gamestate {
 	private void removeKeystrokes()
 	{
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("3"));
-		panel.getActionMap().remove(PlayerType.STAN.name);
-		panel.getActionMap().remove(PlayerType.BRICK.name);
-		panel.getActionMap().remove(PlayerType.TED.name);
+		panel.removeInput("1", PlayerType.STAN.name);
+		panel.removeInput("2", PlayerType.STAN.name);
+		panel.removeInput("3", PlayerType.STAN.name);
 	}
 
 

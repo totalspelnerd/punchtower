@@ -26,8 +26,7 @@ public class StateSaveFile extends Gamestate
 	public void init()
 	{
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "loadSave");
-		panel.getActionMap().put("loadSave", new AbstractAction()
+		panel.addInput("1", "loadSave", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(!loadFail) {
@@ -41,8 +40,7 @@ public class StateSaveFile extends Gamestate
 				}
 			}
 		});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("2"),"newGame");
-		panel.getActionMap().put("newGame", new AbstractAction()
+		panel.addInput("2", "newSave", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(!loadFail) {
@@ -52,8 +50,7 @@ public class StateSaveFile extends Gamestate
 				}
 			}
 		});
-		panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"),"failLoad");
-		panel.getActionMap().put("failLoad", new AbstractAction()
+		panel.addInput("SPACE", "failLoad", new AbstractAction()
 		{
 			@Override public void actionPerformed(final ActionEvent e) {
 				if(loadFail) {
@@ -97,11 +94,8 @@ public class StateSaveFile extends Gamestate
 	private void removeKeystrokes()
 	{
 		final PunchPanel panel = PunchTower.getInstance().getFrame().getPanel();
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("1"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("2"));
-		panel.getInputMap().remove(KeyStroke.getKeyStroke("SPACE"));
-		panel.getActionMap().remove("loadSave");
-		panel.getActionMap().remove("newGame");
-		panel.getActionMap().remove("failLoad");
+		panel.removeInput("1", "loadSave");
+		panel.removeInput("2", "newGame");
+		panel.removeInput("SPACE", "failLoad");
 	}
 }
