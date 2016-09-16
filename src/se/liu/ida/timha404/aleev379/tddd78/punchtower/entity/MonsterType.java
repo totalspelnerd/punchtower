@@ -1,4 +1,4 @@
-package se.liu.ida.timha404.aleev379.tddd78.punchtower.enums;
+package se.liu.ida.timha404.aleev379.tddd78.punchtower.entity;
 
 import java.util.Random;
 
