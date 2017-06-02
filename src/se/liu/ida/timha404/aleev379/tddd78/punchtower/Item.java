@@ -5,9 +5,6 @@ package se.liu.ida.timha404.aleev379.tddd78.punchtower;
  */
 
 
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.Rarity;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
 import java.util.Random;

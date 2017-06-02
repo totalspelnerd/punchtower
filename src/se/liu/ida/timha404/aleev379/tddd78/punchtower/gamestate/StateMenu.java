@@ -5,7 +5,7 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchPanel;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.PunchTower;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;

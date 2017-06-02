@@ -4,8 +4,6 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.AttackData;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.ImageLoader;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.MonsterType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 

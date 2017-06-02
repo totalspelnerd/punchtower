@@ -13,10 +13,10 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveLoad;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Entity;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Monster;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.Player;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.AttackType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.StatType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.SaveFailedException;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
 

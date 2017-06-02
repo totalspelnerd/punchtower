@@ -1,6 +1,6 @@
 package se.liu.ida.timha404.aleev379.tddd78.punchtower;
 
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.entity.PlayerType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.Gamestate;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateInformation;

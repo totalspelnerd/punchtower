@@ -9,11 +9,9 @@ import se.liu.ida.timha404.aleev379.tddd78.punchtower.Renderer;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.SaveFile;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.Stats;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.exceptions.TagException;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.AttackType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.ItemType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.PlayerType;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.Rarity;
-import se.liu.ida.timha404.aleev379.tddd78.punchtower.enums.StatType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.ItemType;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.Rarity;
+import se.liu.ida.timha404.aleev379.tddd78.punchtower.StatType;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.GamestateHandler;
 import se.liu.ida.timha404.aleev379.tddd78.punchtower.gamestate.StateTower;
 
